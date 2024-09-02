@@ -12,11 +12,12 @@ permissions:
 
 jobs:
   destroy:
+    name: Destroy All Azure Resources With Terraform
     runs-on: ubuntu-latest
     environment: AZURE_SECRETS
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v2
 
     - name: Set up Terraform
@@ -32,18 +33,18 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     # Export environment variables for Terraform to authenticate as a Service Principal
-    - name: Set Terraform Environment Variables
+    - name: Set Terraform Environment Variables for OIDC
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV
     
-    - name: Terraform Init
+    - name: Initialize Terraform Init
       run: terraform init
 
-    - name: Terraform Plan Destroy
+    - name: Generate Terraform Plan Destroy
       run: terraform plan -destroy
 
-    - name: Terraform Destroy
+    - name: Execute Terraform Destroy
       run: terraform destroy -auto-approve
