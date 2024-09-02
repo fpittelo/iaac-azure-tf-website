@@ -19,11 +19,6 @@ variable "terraform_key" {
   default = "terraform.tfstate"
 }
 
-variable "az_rg_name" {
-  type = string
-  default = "LABS"
-}
-
 variable "az_rg_location" {
   type = string
   default = "switzerlandnorth"
