@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   deploy:
+    name: Deploy Azure Resources With Terraform
     runs-on: ubuntu-latest
     environment: AZURE_SECRETS
 
@@ -38,12 +39,12 @@ jobs:
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV
     
-    - name: Terraform Init
+    - name: Initialize Terraform
       run: terraform init
 
-    - name: Terraform Plan
+    - name: Generate Terraform Deploy Plan
       run: terraform plan
 
-    - name: Terraform Apply
+    - name: Execute Terraform Apply
       if: github.ref == 'refs/heads/dev'
       run: terraform apply -auto-approve
