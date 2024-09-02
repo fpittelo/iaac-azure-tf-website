@@ -14,7 +14,8 @@ jobs:
   destroy:
     name: Destroy All Azure Resources With Terraform
     runs-on: ubuntu-latest
-    environment: AZURE_SECRETS
+    environment: AZURE
+    #environment: AZURE_SECRETS
 
     steps:
     - name: Checkout Repository
