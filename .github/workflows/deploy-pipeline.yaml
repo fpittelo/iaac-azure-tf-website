@@ -13,7 +13,8 @@ jobs:
   deploy:
     name: Deploy Azure Resources With Terraform
     runs-on: ubuntu-latest
-    environment: AZURE_SECRETS
+    environment: AZURE
+    #environment: AZURE_SECRETS
 
     steps:
     - name: Checkout repository
