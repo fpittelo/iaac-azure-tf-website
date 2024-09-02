@@ -31,7 +31,7 @@ variable "wap_sp_name" {
 
 variable "wap_website_name" {
   type = string
-  default = "prod"
+  default = "website"
 }
 
 variable "wap_sp_sku" {
