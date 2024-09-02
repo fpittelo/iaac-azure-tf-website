@@ -33,6 +33,18 @@ resource "azurerm_linux_web_app" "wap_website" {
   }
 }
 
+resource "azurerm_linux_web_app_slot" "qa" {
+  name            = "qa"
+  app_service_id  = azurerm_linux_web_app.wap_website.id
+
+  site_config {
+    default_documents = ["index.html","index.htm"]
+    application_stack {
+      php_version = "8.2"
+    }
+  }
+}
+
 resource "azurerm_linux_web_app_slot" "dev" {
   name            = "dev"
   app_service_id  = azurerm_linux_web_app.wap_website.id
