@@ -29,6 +29,11 @@ variable "wap_sp_name" {
   default = "iaac-azure-tf-website"
 }
 
+variable "wap_website_name" {
+  type = string
+  default = "iaac-azure-tf-website"
+}
+
 variable "wap_sp_sku" {
   type = string
   default = "S1"
