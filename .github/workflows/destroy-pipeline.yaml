@@ -1,4 +1,4 @@
-name: Terraform Destroy with OIDC
+name: Destroy All Azure Resources
 
 on:
   workflow_dispatch:   # Allows manual trigger of the destroy action

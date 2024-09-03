@@ -1,4 +1,4 @@
-name: Terraform Deployment with OIDC
+name: Deployment On Azure
 
 on:
   push:
