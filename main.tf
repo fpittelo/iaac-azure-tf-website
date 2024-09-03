@@ -2,6 +2,7 @@
 ######## Creation of Azure Web infrastructure  ########
 
 ######## Creation of Azure Key Vault ########
+
 resource "azurerm_key_vault" "website_vault" {
   name                              = "website_vault"
   resource_group_name               = var.az_rg_name
@@ -18,7 +19,9 @@ resource "azurerm_key_vault" "website_vault" {
   access_policy = [{
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
-  
+
+    application_id = null  # If not using an application, this can be set to null
+
     certificate_permissions = [
       "Get",
       "List",
@@ -26,6 +29,18 @@ resource "azurerm_key_vault" "website_vault" {
       "Update",
       "Delete",
       "Purge",
+    ]
+
+    key_permissions = [
+      "Get",  # Add appropriate key permissions here; required even if empty
+    ]
+
+    secret_permissions = [
+      "Get",  # Add appropriate secret permissions here; required even if empty
+    ]
+
+    storage_permissions = [
+      "Get",  # Add appropriate storage permissions here; required even if empty
     ]
   }]
 }
