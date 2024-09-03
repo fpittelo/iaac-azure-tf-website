@@ -4,7 +4,7 @@
 ######## Creation of Azure Key Vault ########
 
 resource "azurerm_key_vault" "website_vault" {
-  name                              = "website-vault"
+  name                              = "alibaba"
   resource_group_name               = var.az_rg_name
   location                          = var.az_rg_location
   tenant_id                         = data.azurerm_client_config.current.tenant_id
