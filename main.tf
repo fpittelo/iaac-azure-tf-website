@@ -2,7 +2,7 @@
 ######## Creation of Azure Web infrastructure  ########
 
 ######## Creation of Azure Key Vault ########
-resource "azurerm_key_vault" "website" {
+resource "azurerm_key_vault" "website_vault" {
   name                              = "website_vault"
   resource_group_name               = var.az_rg_name
   location                          = var.az_rg_location
@@ -15,7 +15,7 @@ resource "azurerm_key_vault" "website" {
   purge_protection_enabled          = false
   public_network_access_enabled     = false
 
-  access_policy = {
+  access_policy = [{
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
   
@@ -27,7 +27,7 @@ resource "azurerm_key_vault" "website" {
       "Delete",
       "Purge",
     ]
-  }
+  }]
 }
 
 ### Creation of Azure Service Plan #########
