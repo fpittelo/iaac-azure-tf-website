@@ -1,5 +1,34 @@
 
-######## Creation of Azure Web App  ########
+######## Creation of Azure Web infrastructure  ########
+
+######## Creation of Azure Key Vault ########
+resource "azurerm_key_vault" "website" {
+  name                              = "website_vault"
+  resource_group_name               = var.az_rg_name
+  location                          = var.az_rg_location
+  tenant_id                         = data.azurerm_client_config.current.tenant_id
+  sku_name                          = "standard"
+  enabled_for_deployment            = true
+  enabled_for_disk_encryption       = false
+  enabled_for_template_deployment   = false
+  soft_delete_retention_days        = 0
+  purge_protection_enabled          = false
+  public_network_access_enabled     = false
+
+  access_policy = {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+  
+    certificate_permissions = [
+      "Get",
+      "List",
+      "Create",
+      "Update",
+      "Delete",
+      "Purge",
+    ]
+  }
+}
 
 ### Creation of Azure Service Plan #########
 resource "azurerm_service_plan" "wap_sp_website" {

@@ -17,8 +17,16 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
-
-  # Configuring the provider to use OIDC authentication with the GitHub OIDC service principal
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+      recover_soft_deleted_certificates = false
+      recover_soft_deleted_keys = false
+      recover_soft_deleted_secrets = false
+    }
+  }
+  # Use OIDC authentication with the GitHub OIDC service principal
   use_oidc         = true
 }
+
+data "azurerm_client_config" "current" {}
