@@ -4,7 +4,7 @@
 ######## Creation of Azure Key Vault ########
 
 resource "azurerm_key_vault" "website_vault" {
-  name                              = "website_vault"
+  name                              = "website-vault"
   resource_group_name               = var.az_rg_name
   location                          = var.az_rg_location
   tenant_id                         = data.azurerm_client_config.current.tenant_id
@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "website_vault" {
   enabled_for_deployment            = true
   enabled_for_disk_encryption       = false
   enabled_for_template_deployment   = false
-  soft_delete_retention_days        = 0
+  soft_delete_retention_days        = 7
   purge_protection_enabled          = false
   public_network_access_enabled     = false
 
