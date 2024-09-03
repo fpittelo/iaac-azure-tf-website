@@ -69,7 +69,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.APP_SERVICE_NAME }}  # Set this to your App Service name
-        slot-name: dev  # Optional: specify slot if needed (e.g., dev, qa)
+#       slot-name:  # Optional: specify slot if needed (e.g., dev, qa)
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Requires publish profile secret
 
     - name: Deploy to Azure Web App Slot (QA)
