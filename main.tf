@@ -57,6 +57,7 @@ resource "azurerm_service_plan" "wap_sp_website" {
     project     = var.project
     owner       = var.owner
     dept        = var.department
+    status      = var.wap_status_dv
   }
 }
 ###### Creation of Azure Website ######

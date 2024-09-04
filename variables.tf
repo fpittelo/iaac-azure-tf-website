@@ -26,7 +26,7 @@ variable "az_rg_location" {
 
 variable "wap_sp_name" {
   type = string
-  default = "iaac-azure-tf-website"
+  default = "fpittelo_sp"
 }
 
 variable "wap_website_name" {
@@ -46,7 +46,7 @@ variable "wap_sp_sku_os_linux" {
 
 variable "project" {
   type = string
-  default = "website"
+  default = "fpittelo_website"
 }
 
 variable "owner" {
@@ -61,15 +61,15 @@ variable "department" {
 
 variable "wap_status_dv" {
   type = string
-  default = "development"
+  default = "DEV"
 }
 
 variable "wap_status_qa" {
   type = string
-  default = "quality"
+  default = "QA"
 }
 
 variable "wap_status_pd" {
   type = string
-  default = "production"
+  default = "PROD"
 }
