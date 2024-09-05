@@ -57,7 +57,7 @@ jobs:
         ACCOUNT_KEY=(az storage account keys list \
           --resource-group $RESOURCE_GROUP \
           --account-name $STORAGE_ACCOUNT_NAME \
-          --query "[0].value" -o tsv)
+          --query "[?keyName=='key1'].value" -o tsv)
 
         # Verify the account key was fetched correctly
         if [ -z "$ACCOUNT_KEY" ]; then
@@ -67,8 +67,8 @@ jobs:
 
         # Create Blob Container
         az storage container create \
-          --account-name $STORAGE_ACCOUNT_NAME \
           --name $CONTAINER_NAME \
+          --account-name $STORAGE_ACCOUNT_NAME \
           --account-key $ACCOUNT_KEY \
           --public-access off
 
