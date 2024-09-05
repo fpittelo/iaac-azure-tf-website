@@ -3,7 +3,7 @@ name: Deployment On Azure
 on:
   push:
     branches:
-      - dev  # Triggers on push to main branch
+      - dev  # Triggers on push to dev branch
 
 permissions:
   id-token: write
@@ -31,14 +31,13 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     
-    # Set environment variables for Terraform authentication
+    # Set environment variables for Terraform using OIDC
     - name: Set environment variables for Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
-    
+
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
     - name: Create Azure Resources for Terraform state
       run: |
@@ -92,8 +91,8 @@ jobs:
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
                        -backend-config="key=terraform.tfstate" \
                        -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
-                       -backend-config="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" \
-                       -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
+                       -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
     - name: Generate Terraform Deploy Plan
       run: terraform plan
