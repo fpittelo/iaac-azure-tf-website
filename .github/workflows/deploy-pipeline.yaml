@@ -51,14 +51,14 @@ jobs:
           --kind StorageV2
         
         # Fetch the storage account key
-        ACCOUNT_KEY=(az storage account keys list) \
+        ACCOUNT_KEY=(az storage account keys list \
           --resource-group $RESOURCE_GROUP \
           --account-name $STORAGE_ACCOUNT_NAME \
           --query "[0].value" -o tsv)
 
         # Create Blob Container
         az storage container create \
-          --account-name $CONTAINER_NAME \
+          --account-name $STORAGE_ACCOUNT_NAME \
           --name $CONTAINER_NAME \
           --account-key $ACCOUNT_KEY \
           --public-access off
