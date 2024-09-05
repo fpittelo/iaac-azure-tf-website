@@ -70,6 +70,7 @@ jobs:
           --name $CONTAINER_NAME \
           --account-name $STORAGE_ACCOUNT_NAME \
           --account-key $ACCOUNT_KEY \
+          --auth-mode login \
           --public-access off
 
         # Set environment variable for Terraform Backend
