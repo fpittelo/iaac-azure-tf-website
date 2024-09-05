@@ -31,6 +31,14 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     
+    # Set environment variables for Terraform authentication
+    - name: Set environment variables for Terraform
+      run: |
+        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+    
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
     - name: Create Azure Resources for Terraform state
       run: |
@@ -82,7 +90,10 @@ jobs:
         terraform init -backend-config="resource_group_name=${{ env.TF_VAR_rg_name }}" \
                        -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
-                       -backend-config="key=terraform.tfstate"
+                       -backend-config="key=terraform.tfstate" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+                       -backend-config="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" \
+                       -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
 
     - name: Generate Terraform Deploy Plan
       run: terraform plan
