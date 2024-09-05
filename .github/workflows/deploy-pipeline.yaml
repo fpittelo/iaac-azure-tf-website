@@ -54,7 +54,7 @@ jobs:
         sleep 30
 
         # Fetch the storage account key
-        ACCOUNT_KEY=(az storage account keys list \
+        ACCOUNT_KEY=$(az storage account keys list \
           --resource-group $RESOURCE_GROUP \
           --account-name $STORAGE_ACCOUNT_NAME \
           --query "[?keyName=='key1'].value" -o tsv)
@@ -69,7 +69,6 @@ jobs:
         az storage container create \
           --name $CONTAINER_NAME \
           --account-name $STORAGE_ACCOUNT_NAME \
-          --account-key $ACCOUNT_KEY \
           --auth-mode login \
           --public-access off
 
