@@ -50,6 +50,9 @@ jobs:
           --sku Standard_LRS \
           --kind StorageV2
         
+        # Adding a small delay to ensure the storage account is fully provisioned
+        sleep 30
+
         # Fetch the storage account key
         ACCOUNT_KEY=(az storage account keys list \
           --resource-group $RESOURCE_GROUP \
