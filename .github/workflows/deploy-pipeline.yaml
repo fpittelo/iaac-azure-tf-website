@@ -36,7 +36,7 @@ jobs:
       run: |
         RESOURCE_GROUP="DEV"
         LOCATION="switzerlandnorth"
-        STORAGE_ACCOUNT_NAME="fpitt$RANDOM"
+        STORAGE_ACCOUNT_NAME="fpittdev365784"
         CONTAINER_NAME="tfstate"
 
         # Create Resource Group
