@@ -1,17 +1,17 @@
 
 variable "az_rg_name" {
   type = string
-  default = "LABS"
+  default = "DEV"
 }
 
 variable "az_sa_name" {
   type = string
-  default = "iaaclabs"
+  default = "fpittdev365784"
 }
 
 variable "az_container_name" {
   type = string
-  default = "iaac-azure-tf-website"
+  default = "tfstate"
 }
 
 variable "terraform_key" {

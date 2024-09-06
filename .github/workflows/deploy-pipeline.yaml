@@ -3,7 +3,7 @@ name: Deployment On Azure
 on:
   push:
     branches:
-      - dev  # Triggers on push to main branch
+      - dev  # Triggers on push to dev branch
 
 permissions:
   id-token: write
@@ -30,17 +30,74 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        allow-no-subscriptions: true
+        enable-AzPSSession: false
+        environment: azurecloud
 
-    # Export environment variables for Terraform to authenticate as a Service Principal
-    - name: Set Terraform Environment Variables
+    # Set environment variables for Terraform authentication
+    - name: Set environment variables for Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-        echo "ARM_USE_OIDC=true" >> $GITHUB_ENV
-    
-    - name: Initialize Terraform
-      run: terraform init
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+        echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
+
+    # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
+    - name: Create Azure Resources for Terraform state
+      run: |
+        RESOURCE_GROUP="DEV"
+        LOCATION="switzerlandnorth"
+        STORAGE_ACCOUNT_NAME="fpittdev365784"
+        CONTAINER_NAME="tfstate"
+
+        # Create Resource Group
+        az group create --name $RESOURCE_GROUP --location $LOCATION
+
+        # Create Storage Account
+        az storage account create \
+          --name $STORAGE_ACCOUNT_NAME \
+          --resource-group $RESOURCE_GROUP \
+          --location $LOCATION \
+          --sku Standard_LRS \
+          --kind StorageV2
+        
+        # Adding a small delay to ensure the storage account is fully provisioned
+        sleep 30
+
+        # Fetch the storage account key
+        ACCOUNT_KEY=$(az storage account keys list \
+          --resource-group $RESOURCE_GROUP \
+          --account-name $STORAGE_ACCOUNT_NAME \
+          --query "[?keyName=='key1'].value" -o tsv)
+
+        # Verify the account key was fetched correctly
+        if [ -z "$ACCOUNT_KEY" ]; then
+          echo "Failed to retrieve storage account key"
+          exit 1
+        fi
+
+        # Create Blob Container
+        az storage container create \
+          --name $CONTAINER_NAME \
+          --account-name $STORAGE_ACCOUNT_NAME \
+          --auth-mode login \
+          --public-access off
+
+        # Set environment variable for Terraform Backend
+        echo "TF_VAR_rg_name=$RESOURCE_GROUP" >> $GITHUB_ENV
+        echo "TF_VAR_sa_name=$STORAGE_ACCOUNT_NAME" >> $GITHUB_ENV
+        echo "TF_VAR_container_name=$CONTAINER_NAME" >> $GITHUB_ENV
+
+    - name: Initialize Terraform with Backend
+      run: |
+        terraform init -backend-config="resource_group_name=${{ env.TF_VAR_rg_name }}" \
+                       -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
+                       -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
+                       -backend-config="key=terraform.tfstate" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+                       -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+                       -backend-config="use_oidc=true"
 
     - name: Generate Terraform Deploy Plan
       run: terraform plan

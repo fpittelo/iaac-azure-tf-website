@@ -1,10 +1,7 @@
-name: Destroy All Azure Resources
+name: Destroy On Azure
 
 on:
-  workflow_dispatch:   # Allows manual trigger of the destroy action
-  pull_request:
-    branches:
-      - dev            # Optional: Add conditions for when to trigger destroy
+  workflow_dispatch:  # Enables manual triggering of the workflow
 
 permissions:
   id-token: write
@@ -12,13 +9,12 @@ permissions:
 
 jobs:
   destroy:
-    name: Destroy All Azure Resources With Terraform
+    name: Destroy Azure Resources With Terraform
     runs-on: ubuntu-latest
     environment: AZURE
-    #environment: AZURE_SECRETS
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up Terraform
@@ -32,20 +28,61 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        allow-no-subscriptions: true
+        enable-AzPSSession: false
+        environment: azurecloud
 
-    # Export environment variables for Terraform to authenticate as a Service Principal
-    - name: Set Terraform Environment Variables for OIDC
+    # Set environment variables for Terraform authentication and backend
+    - name: Set environment variables for Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-        echo "ARM_USE_OIDC=true" >> $GITHUB_ENV
-    
-    - name: Initialize Terraform Init
-      run: terraform init
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+        echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
+        # Explicitly set Terraform backend configuration variables
+        echo "TF_VAR_rg_name=DEV" >> $GITHUB_ENV
+        echo "TF_VAR_sa_name=fpittdev365784" >> $GITHUB_ENV
+        echo "TF_VAR_container_name=tfstate" >> $GITHUB_ENV
 
-    - name: Generate Terraform Plan Destroy
+    # Initialize Terraform with Backend
+    - name: Initialize Terraform with Backend
+      run: |
+        terraform init -backend-config="resource_group_name=${{ env.TF_VAR_rg_name }}" \
+                       -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
+                       -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
+                       -backend-config="key=terraform.tfstate" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+                       -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+                       -backend-config="use_oidc=true"
+
+    # Generate Terraform Destroy Plan (Optional, for review purposes)
+    - name: Generate Terraform Destroy Plan
       run: terraform plan -destroy
 
+    # Execute Terraform Destroy
     - name: Execute Terraform Destroy
       run: terraform destroy -auto-approve
+
+    # Step to delete the Blob Container
+    - name: Delete Blob Container
+      run: |
+        az storage container delete \
+          --name ${{ env.TF_VAR_container_name }} \
+          --account-name ${{ env.TF_VAR_sa_name }} \
+          --auth-mode login
+
+    # Step to delete the Storage Account
+    - name: Delete Storage Account
+      run: |
+        az storage account delete \
+          --name ${{ env.TF_VAR_sa_name }} \
+          --resource-group ${{ env.TF_VAR_rg_name }} \
+          --yes
+
+    # Step to delete the Resource Group
+    - name: Delete Resource Group
+      run: |
+        az group delete \
+          --name ${{ env.TF_VAR_rg_name }} \
+          --yes --no-wait
