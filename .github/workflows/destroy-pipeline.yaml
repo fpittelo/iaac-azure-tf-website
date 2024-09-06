@@ -63,3 +63,26 @@ jobs:
     # Execute Terraform Destroy
     - name: Execute Terraform Destroy
       run: terraform destroy -auto-approve
+
+    # Step to delete the Blob Container
+    - name: Delete Blob Container
+      run: |
+        az storage container delete \
+          --name ${{ env.TF_VAR_container_name }} \
+          --account-name ${{ env.TF_VAR_sa_name }} \
+          --auth-mode login
+
+    # Step to delete the Storage Account
+    - name: Delete Storage Account
+      run: |
+        az storage account delete \
+          --name ${{ env.TF_VAR_sa_name }} \
+          --resource-group ${{ env.TF_VAR_rg_name }} \
+          --yes
+
+    # Step to delete the Resource Group
+    - name: Delete Resource Group
+      run: |
+        az group delete \
+          --name ${{ env.TF_VAR_rg_name }} \
+          --yes --no-wait
