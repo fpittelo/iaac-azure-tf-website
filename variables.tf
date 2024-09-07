@@ -6,12 +6,12 @@ variable "az_rg_name" {
 
 variable "az_sa_name" {
   type = string
-  default = "iaac-azure-tf-website"
+  default = "iatwebsite"
 }
 
 variable "az_container_name" {
   type = string
-  default = "iaac-azure-tf-website"
+  default = "iatwebsite"
 }
 
 variable "terraform_key" {
