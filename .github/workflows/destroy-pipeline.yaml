@@ -1,4 +1,4 @@
-name: Destroy On Azure
+name: Destroy Azure Resources
 
 on:
   workflow_dispatch:  # Enables manual triggering of the workflow
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   destroy:
-    name: Destroy Azure Resources With Terraform
+    name: Destroy Azure Resources
     runs-on: ubuntu-latest
     environment: AZURE
 
@@ -25,23 +25,23 @@ jobs:
     - name: Login To Azure with OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
         allow-no-subscriptions: true
         enable-AzPSSession: false
         environment: azurecloud
 
     # Set environment variables for Terraform authentication and backend
-    - name: Set environment variables for Terraform
+    - name: Set Variables For Terraform
       run: |
-        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_DEV }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
         # Explicitly set Terraform backend configuration variables
-        echo "TF_VAR_rg_name=DEV" >> $GITHUB_ENV
-        echo "TF_VAR_sa_name=fpittdev365784" >> $GITHUB_ENV
+        echo "TF_VAR_rg_name=iaac-azure-tf-website" >> $GITHUB_ENV
+        echo "TF_VAR_sa_name=iatwebsite" >> $GITHUB_ENV
         echo "TF_VAR_container_name=tfstate" >> $GITHUB_ENV
 
     # Initialize Terraform with Backend
@@ -51,9 +51,9 @@ jobs:
                        -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
                        -backend-config="key=terraform.tfstate" \
-                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
                        -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" \
                        -backend-config="use_oidc=true"
 
     # Generate Terraform Destroy Plan (Optional, for review purposes)
