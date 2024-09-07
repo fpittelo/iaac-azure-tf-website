@@ -25,9 +25,9 @@ jobs:
     - name: Login To Azure with OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
         allow-no-subscriptions: true
         enable-AzPSSession: false
         environment: azurecloud
@@ -35,8 +35,8 @@ jobs:
     # Set environment variables for Terraform authentication and backend
     - name: Set environment variables for Terraform
       run: |
-        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_DEV }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
         # Explicitly set Terraform backend configuration variables
@@ -51,9 +51,9 @@ jobs:
                        -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
                        -backend-config="key=terraform.tfstate" \
-                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
                        -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" \
                        -backend-config="use_oidc=true"
 
     # Generate Terraform Destroy Plan (Optional, for review purposes)
