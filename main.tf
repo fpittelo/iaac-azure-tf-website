@@ -82,40 +82,40 @@ resource "azurerm_linux_web_app" "wap_website" {
   }
 }
 ##### Creation of Azure Web App Slot qa ####
-resource "azurerm_linux_web_app_slot" "qa" {
-  name            = "qa"
-  app_service_id  = azurerm_linux_web_app.wap_website.id
-  
-  tags = {
-    project     = var.project
-    owner       = var.owner
-    dept        = var.department
-    status      = var.wap_status_dv
-  }
-  site_config {
-    default_documents = ["index.html","index.htm"]
-    application_stack {
-      php_version = "8.2"
-    }
-  }
-}
+#resource "azurerm_linux_web_app_slot" "qa" {
+# name            = "qa"
+# app_service_id  = azurerm_linux_web_app.wap_website.id
+# 
+# tags = {
+#   project     = var.project
+#   owner       = var.owner
+#   dept        = var.department
+#   status      = var.wap_status_dv
+# }
+# site_config {
+#   default_documents = ["index.html","index.htm"]
+#   application_stack {
+#     php_version = "8.2"
+#   }
+# }
+#}
 
-##### Creation of Azure Web App Slot qa ####
-resource "azurerm_linux_web_app_slot" "dev" {
-  name            = "dev"
-  app_service_id  = azurerm_linux_web_app.wap_website.id
+##### Creation of Azure Web App Slot dev ####
+#resource "azurerm_linux_web_app_slot" "dev" {
+# name            = "dev"
+# app_service_id  = azurerm_linux_web_app.wap_website.id
   
-  tags = {
-    project     = var.project
-    owner       = var.owner
-    dept        = var.department
-    status      = var.wap_status_dv
-  }
+# tags = {
+#   project     = var.project
+#   owner       = var.owner
+#   dept        = var.department
+#   status      = var.wap_status_dv
+# }
 
-  site_config {
-    default_documents = ["index.html","index.htm"]
-    application_stack {
-      php_version = "8.2"
-    }
-  }
-}
+# site_config {
+#   default_documents = ["index.html","index.htm"]
+#   application_stack {
+#     php_version = "8.2"
+#   }
+# }
+#}

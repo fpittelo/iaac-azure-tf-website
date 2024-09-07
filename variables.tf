@@ -1,17 +1,17 @@
 
 variable "az_rg_name" {
   type = string
-  default = "DEV"
+  default = "iaac-azure-tf-website"
 }
 
 variable "az_sa_name" {
   type = string
-  default = "fpittdev365784"
+  default = "iatwebsite"
 }
 
 variable "az_container_name" {
   type = string
-  default = "tfstate"
+  default = "iatwebsite"
 }
 
 variable "terraform_key" {
@@ -26,12 +26,12 @@ variable "az_rg_location" {
 
 variable "wap_sp_name" {
   type = string
-  default = "fpittelo_sp"
+  default = "iat-website-sp"
 }
 
 variable "wap_website_name" {
   type = string
-  default = "fpittelo"
+  default = "iat-website"
 }
 
 variable "wap_sp_sku" {
@@ -46,7 +46,7 @@ variable "wap_sp_sku_os_linux" {
 
 variable "project" {
   type = string
-  default = "fpittelo_website"
+  default = "iaac-azure-tf-website"
 }
 
 variable "owner" {
