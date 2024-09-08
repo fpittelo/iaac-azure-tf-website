@@ -1,13 +1,10 @@
-name: Deployment In Dev
+name: Deployment In MAIN
 
 on:
-  push:
+  pull_request:
     branches:
-      - dev  # Triggers on push to dev branch
-# pull_request:
-#   branches:
 #     - qa
-#     - main
+      - main
 
 permissions:
   id-token: write
@@ -15,12 +12,12 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy Dev Azure Resources
+    name: Deploy MAIN Azure Resources
     runs-on: ubuntu-latest
     environment: AZURE
 
     steps:
-    - name: Checkout Dev Repository
+    - name: Checkout MAIN Repository
       uses: actions/checkout@v3
 
     - name: Set up Terraform
@@ -28,26 +25,26 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: Login With Dev OIDC
+    - name: Login With MAIN OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID_MAIN }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_MAIN }}
         allow-no-subscriptions: true
         enable-AzPSSession: false
         environment: azurecloud
 
     # Set environment variables for Terraform authentication
-    - name: Set Dev Variables For Terraform
+    - name: Set MAIN Variables For Terraform
       run: |
-        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_DEV}}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_MAIN}}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID_DEV }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID_MAIN }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
 
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
-    - name: Create Dev Terraform Resources
+    - name: Create MAIN Terraform Resources
       run: |
         RESOURCE_GROUP="iaac-azure-tf-website"
         LOCATION="switzerlandnorth"
@@ -98,23 +95,23 @@ jobs:
                        -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
                        -backend-config="key=terraform.tfstate" \
-                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID_MAIN }}" \
                        -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID_MAIN }}" \
                        -backend-config="use_oidc=true"
 
     - name: Generate Terraform Deploy Plan
       run: terraform plan
 
     - name: Execute Terraform Apply
-      if: github.ref == 'refs/heads/dev'
+      if: github.ref == 'refs/heads/MAIN'
       run: terraform apply -auto-approve
 
 ###### Publish Website to Azure Web App
 
-  # Deploy to Dev
+  # Deploy to MAIN
   deploy-website:
-    name: Deploy Dev Website
+    name: Deploy MAIN Website
     runs-on: ubuntu-latest
     needs: deploy
     environment: AZURE
@@ -129,12 +126,12 @@ jobs:
     - name: Login To Azure with OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID_MAIN }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_MAIN }}
 
     - name: Deploy Website to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.APP_SERVICE_NAME_DEV }}
+        app-name: ${{ secrets.APP_SERVICE_NAME_MAIN }}
         package: ./website
