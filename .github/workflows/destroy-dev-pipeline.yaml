@@ -1,4 +1,4 @@
-name: Destroy Azure Resources
+name: Destroy Dev
 
 on:
   workflow_dispatch:  # Enables manual triggering of the workflow
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   destroy:
-    name: Destroy Azure Resources
+    name: Destroy Dev Resources
     runs-on: ubuntu-latest
     environment: AZURE
 
