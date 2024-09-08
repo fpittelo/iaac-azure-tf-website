@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - dev  # Triggers on push to dev branch
-# pull_request:
-#   branches:
-#     - qa
-#     - main
 
 permissions:
   id-token: write
