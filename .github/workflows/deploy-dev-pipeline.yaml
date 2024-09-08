@@ -1,4 +1,4 @@
-name: Deployment On Azure
+name: Deployment In Dev
 
 on:
   push:
@@ -108,8 +108,8 @@ jobs:
 
 ###### Publish Website to Azure Web App
 
-  # Deploy to Production
-  deploy-prod:
+  # Deploy to Dev
+  deploy-website:
     name: Deploy Dev Website
     runs-on: ubuntu-latest
     needs: deploy
