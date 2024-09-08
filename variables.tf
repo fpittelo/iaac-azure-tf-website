@@ -1,7 +1,12 @@
 
+#variable "az_rg_name" {
+# type = string
+# default = "iaac-azure-tf-website"
+#}
+
 variable "az_rg_name" {
+  description = "Name of the resource group"
   type = string
-  default = "iaac-azure-tf-website"
 }
 
 variable "az_sa_name" {

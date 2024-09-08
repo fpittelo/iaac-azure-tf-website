@@ -19,6 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: AZURE
 
+    # Define environment variables at the job level
+    env:
+      RESOURCE_GROUP: iaac-azure-tf-website-${{ github.ref_name }}  # Dynamic naming
+      LOCATION: switzerlandnorth
+      STORAGE_ACCOUNT_NAME: iatwebsite
+      CONTAINER_NAME: tfstate
+
     steps:
     - name: Checkout Dev Repository
       uses: actions/checkout@v3
@@ -47,14 +54,10 @@ jobs:
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
 
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
-    - name: Create Dev Terraform Resources
+    - name: Create DEV Terraform Resources
       run: |
-        RESOURCE_GROUP="iaac-azure-tf-website"
-        LOCATION="switzerlandnorth"
-        STORAGE_ACCOUNT_NAME="iatwebsite"
-        CONTAINER_NAME="tfstate"
-
-        # Create Resource Group
+        # Create Resource Group using the dynamic name
+        echo "Creating resource group: $RESOURCE_GROUP"
         az group create --name $RESOURCE_GROUP --location $LOCATION
 
         # Create Storage Account
