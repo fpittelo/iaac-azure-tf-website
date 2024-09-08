@@ -3,7 +3,7 @@ name: Deployment In Dev
 on:
   push:
     branches:
-      - dev  # Triggers on push to dev branch
+      - dev  # Triggers on push to dev
 
 permissions:
   id-token: write
