@@ -45,7 +45,7 @@ jobs:
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
     - name: Create Dev Terraform Resources
       run: |
-        RESOURCE_GROUP="iaac-azure-tf-website-dev"
+        RESOURCE_GROUP="iaac-azure-tf-website"
         LOCATION="switzerlandnorth"
         STORAGE_ACCOUNT_NAME="iatwebsitedev"
         CONTAINER_NAME="tfstate"
