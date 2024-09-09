@@ -41,7 +41,7 @@ jobs:
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
         # Explicitly set Terraform backend configuration variables
         echo "TF_VAR_rg_name=iaac-azure-tf-website" >> $GITHUB_ENV
-        echo "TF_VAR_sa_name=iatwebsite" >> $GITHUB_ENV
+        echo "TF_VAR_sa_name=iatwebsitedev" >> $GITHUB_ENV
         echo "TF_VAR_container_name=tfstate" >> $GITHUB_ENV
 
     # Initialize Terraform with Backend
