@@ -38,16 +38,16 @@ jobs:
     - name: Set Dev Variables For Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_DEV}}" >> $GITHUB_ENV
-        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID_DEV }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
 
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
     - name: Create Dev Terraform Resources
       run: |
-        RESOURCE_GROUP="iaac-azure-tf-website"
+        RESOURCE_GROUP="iaac-azure-tf-website-dev"
         LOCATION="switzerlandnorth"
-        STORAGE_ACCOUNT_NAME="iatwebsite"
+        STORAGE_ACCOUNT_NAME="iatwebsitedev"
         CONTAINER_NAME="tfstate"
 
         # Create Resource Group
