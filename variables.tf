@@ -4,9 +4,19 @@ variable "az_rg_name" {
   default = "iaac-azure-tf-website"
 }
 
-variable "az_sa_name" {
+variable "az_sa_name_dev" {
   type = string
-  default = "iatwebsite"
+  default = "iatwebsitedev"
+}
+
+variable "az_sa_name_qa" {
+  type = string
+  default = "iatwebsiteqa"
+}
+
+variable "az_sa_name_main" {
+  type = string
+  default = "iatwebsitemain"
 }
 
 variable "az_container_name" {
