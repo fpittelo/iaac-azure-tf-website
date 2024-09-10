@@ -1,7 +1,7 @@
 name: Deployment In QA
 
 on:
-  pull_request:
+  push:
     branches:
       - qa  # Triggers on push to QA
 
