@@ -3,6 +3,7 @@ name: Deployment In QA
 on:
   push:
     branches:
+      - dev # Triggers on push to DEV
       - qa  # Triggers on push to QA
 
 permissions:
