@@ -28,9 +28,16 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID_QA }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
-        allow-no-subscriptions: true
+        allow-no-subscriptions: false
         enable-AzPSSession: false
         environment: azurecloud
+
+    # Verify the subscription context
+    - name: Verify Azure Subscription
+      run: |
+        az account show
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+        az account show # Verify subscription context
 
     # Set environment variables for Terraform authentication and backend
     - name: Set Variables For Terraform
