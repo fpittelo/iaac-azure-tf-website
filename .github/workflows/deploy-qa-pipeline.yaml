@@ -42,7 +42,7 @@ jobs:
         az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
         az account show # Verify subscription context
 
-        # Set environment variables for Terraform authentication
+    # Set environment variables for Terraform authentication
     - name: Set Dev Variables For Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_QA}}" >> $GITHUB_ENV
