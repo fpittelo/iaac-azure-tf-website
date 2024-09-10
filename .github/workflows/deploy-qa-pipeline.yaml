@@ -58,6 +58,7 @@ jobs:
         CONTAINER_NAME="tfstate"
 
         # Explicitly set the subscription context
+        az account list
         az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
 
         # Create Resource Group
