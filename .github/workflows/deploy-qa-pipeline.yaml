@@ -30,11 +30,18 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID_QA }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
-        allow-no-subscriptions: true
+        allow-no-subscriptions: false
         enable-AzPSSession: false
         environment: azurecloud
 
-    # Set environment variables for Terraform authentication
+    # Verify the subscription context
+    - name: Verify Azure Subscription
+      run: |
+        az account show
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+        az account show # Verify subscription context
+
+        # Set environment variables for Terraform authentication
     - name: Set Dev Variables For Terraform
       run: |
         echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_QA}}" >> $GITHUB_ENV
@@ -50,6 +57,9 @@ jobs:
         STORAGE_ACCOUNT_NAME="iatwebsiteqa"
         CONTAINER_NAME="tfstate"
 
+        # Explicitly set the subscription context
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+
         # Create Resource Group
         az group create --name $RESOURCE_GROUP --location $LOCATION
 
@@ -59,7 +69,8 @@ jobs:
           --resource-group $RESOURCE_GROUP \
           --location $LOCATION \
           --sku Standard_LRS \
-          --kind StorageV2
+          --kind StorageV2 \
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
         
         # Adding a small delay to ensure the storage account is fully provisioned
         sleep 30
@@ -68,7 +79,8 @@ jobs:
         ACCOUNT_KEY=$(az storage account keys list \
           --resource-group $RESOURCE_GROUP \
           --account-name $STORAGE_ACCOUNT_NAME \
-          --query "[?keyName=='key1'].value" -o tsv)
+          --query "[?keyName=='key1'].value" -o tsv \
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }})
 
         # Verify the account key was fetched correctly
         if [ -z "$ACCOUNT_KEY" ]; then
@@ -81,7 +93,8 @@ jobs:
           --name $CONTAINER_NAME \
           --account-name $STORAGE_ACCOUNT_NAME \
           --auth-mode login \
-          --public-access off
+          --public-access off \
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
 
         # Set environment variable for Terraform Backend
         echo "TF_VAR_rg_name=$RESOURCE_GROUP" >> $GITHUB_ENV
