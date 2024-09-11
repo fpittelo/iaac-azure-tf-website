@@ -3,8 +3,7 @@ name: Deployment In QA
 on:
   push:
     branches:
-      - dev # Triggers on push to DEV
-      - qa  # Triggers on push to QA
+      - qa # Triggers on push to QA
 
 permissions:
   id-token: write
@@ -38,9 +37,10 @@ jobs:
     # Verify the subscription context
     - name: Verify Azure Subscription
       run: |
-        az account show
-        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
-        az account show # Verify subscription context
+        az account set --subscription SUBSCRIPTION_QA
+      # az account show
+      # az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+      # az account show # Verify subscription context
 
     # Set environment variables for Terraform authentication
     - name: Set Dev Variables For Terraform
@@ -59,7 +59,9 @@ jobs:
         CONTAINER_NAME="tfstate"
 
         # Explicitly set the subscription context
+        az account show
         az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+        az account show # Verify subscription context
 
         # Create Resource Group
         az group create --name $RESOURCE_GROUP --location $LOCATION
