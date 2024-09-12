@@ -1,9 +1,10 @@
 name: Deployment In QA
 
 on:
-  pull_request:
-    branches:
-      - qa  # Triggers on push to QA
+  workflow_dispatch:  # Enables manual triggering of the workflow
+# pull_request:
+#   branches:
+#     - qa  # Triggers on push to QA
 
 permissions:
   id-token: write
