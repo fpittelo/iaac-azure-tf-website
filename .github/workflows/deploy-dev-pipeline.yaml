@@ -38,9 +38,8 @@ jobs:
     # Verify the subscription context
     - name: Verify Azure Subscription
       run: |
-        az account show
         az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
-        az account show # Verify subscription context
+        az account show --query "{Subscription:id, User:user.name, Default:isDefault}"
 
     # Set environment variables for Terraform authentication
     - name: Set Dev Variables For Terraform
