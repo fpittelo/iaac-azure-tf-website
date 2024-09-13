@@ -14,7 +14,7 @@ jobs:
   deploy:
     name: Deploy Dev Azure Resources
     runs-on: ubuntu-latest
-    environment: AZURE
+    environment: dev #must match the federated credential "based on selection"
 
     steps:
     - name: Checkout Dev Repository
@@ -28,9 +28,9 @@ jobs:
     - name: Login With Dev OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         allow-no-subscriptions: false
         enable-AzPSSession: false
         environment: azurecloud
@@ -38,15 +38,15 @@ jobs:
     # Verify the subscription context
     - name: Verify Azure Subscription
       run: |
-        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         az account show --query "{Subscription:id, User:user.name, Default:isDefault}"
 
     # Set environment variables for Terraform authentication
     - name: Set Dev Variables For Terraform
       run: |
-        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID_DEV}}" >> $GITHUB_ENV
-        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID}}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT }}" >> $GITHUB_ENV
         echo "ARM_USE_OIDC=true" >> $GITHUB_ENV  # Important for OIDC authentication
 
     # Step to create the Resource Group, Storage Account, and Blob Container for Terraform state
@@ -58,7 +58,7 @@ jobs:
         CONTAINER_NAME="tfstate"
 
         # Explicitly set the subscription context
-        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
         # Create Resource Group
         az group create --name $RESOURCE_GROUP --location $LOCATION
@@ -70,7 +70,7 @@ jobs:
           --location $LOCATION \
           --sku Standard_LRS \
           --kind StorageV2 \
-          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
         # Adding a small delay to ensure the storage account is fully provisioned
         sleep 30
@@ -80,7 +80,7 @@ jobs:
           --resource-group $RESOURCE_GROUP \
           --account-name $STORAGE_ACCOUNT_NAME \
           --query "[?keyName=='key1'].value" -o tsv \
-          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }})
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }})
 
         # Verify the account key was fetched correctly
         if [ -z "$ACCOUNT_KEY" ]; then
@@ -94,7 +94,7 @@ jobs:
           --account-name $STORAGE_ACCOUNT_NAME \
           --auth-mode login \
           --public-access off \
-          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+          --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
         # Set environment variable for Terraform Backend
         echo "TF_VAR_rg_name=$RESOURCE_GROUP" >> $GITHUB_ENV
@@ -107,9 +107,9 @@ jobs:
                        -backend-config="storage_account_name=${{ env.TF_VAR_sa_name }}" \
                        -backend-config="container_name=${{ env.TF_VAR_container_name }}" \
                        -backend-config="key=terraform.tfstate" \
-                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
+                       -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
                        -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" \
+                       -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
                        -backend-config="use_oidc=true"
 
     - name: Generate Terraform Deploy Plan
@@ -138,12 +138,12 @@ jobs:
     - name: Login To Azure with OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Deploy Website to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.APP_SERVICE_NAME_DEV }}
+        app-name: ${{ secrets.APP_SERVICE_NAME }}
         package: ./website
