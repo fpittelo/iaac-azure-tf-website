@@ -2,10 +2,10 @@
 
 terraform {
   backend "azurerm" {
-    resource_group_name   = "iaac-azure-tf-website"    # Replace with your resource group name
-    storage_account_name  = "iaac-azure-tf-website"   # Replace with your storage account name
-    container_name        = "iaac-azure-tf-website"
-    key                   = "terraform.tfstate"
+#   resource_group_name   = "iaac-azure-tf-website"    # Replace with your resource group name
+#   storage_account_name  = "iaac-azure-tf-website"   # Replace with your storage account name
+#   container_name        = "iaac-azure-tf-website"
+#   key                   = "terraform.tfstate"
   }
 
   required_providers {
