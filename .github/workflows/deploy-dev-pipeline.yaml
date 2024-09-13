@@ -1,5 +1,3 @@
-name:  Deploy Dev Environment
-
 on:
   push:
     branches: [ dev ]  # Triggers on push to dev
