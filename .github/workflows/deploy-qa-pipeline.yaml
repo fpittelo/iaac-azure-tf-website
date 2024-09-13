@@ -1,39 +1,47 @@
 name: Deployment In QA
 
 on:
-  workflow_dispatch:  # Enables manual triggering of the workflow
-# pull_request:
-#   branches:
-#     - qa  # Triggers on push to QA
+  push:
+    branches: [ qa ]   # Triggers on push to qa
+#   workflow_dispatch: # Enables manual triggering of the workflow
 
 permissions:
-  id-token: write
+  id-token: write # Require write permission to Fetch an OIDC token
   contents: read
 
 jobs:
   deploy:
     name: Deploy QA Azure Resources
     runs-on: ubuntu-latest
-    environment: AZURE
+    environment: qa #must match the federated credential "based on selection" \
+    # and match Github Action Secrets name
 
     steps:
-    - name: Checkout Dev Repository
+    - name: Checkout code
       uses: actions/checkout@v3
+
+    - name: Authenticate to Azure using OIDC
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        allow-no-subscriptions: false
+        enable-AzPSSession: false
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
 
-    - name: Login With QA OIDC
+    - name: Login on OIDC
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID_QA }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_QA }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         allow-no-subscriptions: false
         enable-AzPSSession: false
-        environment: azurecloud
 
     # Verify the subscription context
     - name: Verify Azure Subscription
