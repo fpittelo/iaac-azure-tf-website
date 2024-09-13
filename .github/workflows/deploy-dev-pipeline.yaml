@@ -2,9 +2,9 @@ name: Deployment In Dev
 
 on:
   workflow_dispatch:  # Enables manual triggering of the workflow
-# push:
-#   branches:
-#     - dev  # Triggers on push to dev
+  push:
+    branches:
+      - dev  # Triggers on push to dev
 
 permissions:
   id-token: write
