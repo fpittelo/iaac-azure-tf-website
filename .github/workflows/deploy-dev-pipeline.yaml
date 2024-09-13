@@ -13,7 +13,7 @@ jobs:
   deploy:
     name: Deploy Dev Resources
     runs-on: ubuntu-latest
-    environment: AZURE #must match the federated credential "based on selection" \
+    environment: dev #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
     steps:
     - name: Checkout code

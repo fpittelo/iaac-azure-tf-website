@@ -11,7 +11,7 @@ jobs:
   destroy:
     name: Destroy Dev Resources
     runs-on: ubuntu-latest
-    environment: AZURE
+    environment: dev
 
     steps:
     - name: Checkout repository
