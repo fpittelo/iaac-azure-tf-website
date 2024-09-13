@@ -25,15 +25,15 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: Login With Dev OIDC
+    - name: Login on OIDC
       uses: azure/login@v2
+      environment: dev #must match the federated credential "based on selection"
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         allow-no-subscriptions: false
         enable-AzPSSession: false
-        environment: azurecloud
 
     # Verify the subscription context
     - name: Verify Azure Subscription
