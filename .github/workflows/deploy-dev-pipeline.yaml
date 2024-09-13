@@ -150,5 +150,5 @@ jobs:
     - name: Deploy Website to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.APP_SERVICE_NAME }}
+        app-name: ${{ secrets.APP_SERVICE_NAME_DEV }}
         package: ./website
