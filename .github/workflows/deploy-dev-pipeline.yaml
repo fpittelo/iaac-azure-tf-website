@@ -4,14 +4,14 @@ on:
 #   workflow_dispatch: # Enables manual triggering of the workflow
 
 permissions:
-  id-token: write
+  id-token: write # Require write permission to Fetch an OIDC token
   contents: read
 
 jobs:
   deploy:
     name: Deploy Dev Resources
     runs-on: ubuntu-latest
-    environment: dev #must match the federated credential "based on selection"
+    environment: AZURE #must match the federated credential "based on selection"
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
