@@ -67,7 +67,7 @@ jobs:
 
         # Explicitly set the subscription context
         az account list --output table
-        az account set --subscription $SUBSCRIPTION_QA
+        az account set -s SUBSCRIPTION_QA
         az account show --output table
 
 
