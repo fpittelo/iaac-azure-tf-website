@@ -63,10 +63,10 @@ jobs:
         LOCATION="switzerlandnorth"
         STORAGE_ACCOUNT_NAME="iatwebsiteqa"
         CONTAINER_NAME="tfstate"
+        SUBSCRIPTION="SUBSCRIPTION_QA"
 
         # Explicitly set the subscription context
-        az account set --subscription SUBSCRIPTION_QA
-        # az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        az account set --subscription $SUBSCRIPTION_QA
 
         # Create Resource Group
         az group create --name $RESOURCE_GROUP --location $LOCATION
@@ -78,8 +78,7 @@ jobs:
           --location $LOCATION \
           --sku Standard_LRS \
           --kind StorageV2 \
-          --subscription SUBSCRIPTION_QA
-        # --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        # --subscription $SUBSCRIPTION_QA
         
         # Adding a small delay to ensure the storage account is fully provisioned
         sleep 30
