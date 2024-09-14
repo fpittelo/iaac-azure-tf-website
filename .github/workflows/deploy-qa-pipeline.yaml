@@ -68,6 +68,8 @@ jobs:
         # Explicitly set the subscription context
         az account list --output table
         az account set --subscription $SUBSCRIPTION_QA
+        az account show --output table
+
 
         # Create Resource Group
         az group create --name $RESOURCE_GROUP --location $LOCATION
