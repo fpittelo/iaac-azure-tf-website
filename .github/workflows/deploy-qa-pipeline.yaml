@@ -11,11 +11,10 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy QA Azure Resources
+    name: Deploy QA Resources
     runs-on: ubuntu-latest
     environment: qa #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
