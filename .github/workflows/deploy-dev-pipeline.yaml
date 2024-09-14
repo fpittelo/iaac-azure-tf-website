@@ -152,5 +152,5 @@ jobs:
     - name: Deploy Website to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.APP_SERVICE_NAME }} # devmarketing in dev / qamarketing in qa
+        app-name: ${{ secrets.APP_SERVICE_NAME }} # marketing same as in main.tf
         package: ./website

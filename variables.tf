@@ -36,12 +36,12 @@ variable "az_rg_location" {
 
 variable "wap_sp_name" {
   type = string
-  default = "iat-website-sp"
+  default = "marketing-sp"
 }
 
 variable "wap_website_name" {
   type = string
-  default = "iat-website"
+  default = "marketing"
 }
 
 variable "wap_sp_sku" {
