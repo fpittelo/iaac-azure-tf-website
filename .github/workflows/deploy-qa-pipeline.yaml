@@ -66,6 +66,7 @@ jobs:
         SUBSCRIPTION="SUBSCRIPTION_QA"
 
         # Explicitly set the subscription context
+        az account list --output table
         az account set --subscription $SUBSCRIPTION_QA
 
         # Create Resource Group
@@ -78,7 +79,7 @@ jobs:
           --location $LOCATION \
           --sku Standard_LRS \
           --kind StorageV2 \
-        # --subscription $SUBSCRIPTION_QA
+          --subscription $SUBSCRIPTION_QA
         
         # Adding a small delay to ensure the storage account is fully provisioned
         sleep 30
