@@ -71,13 +71,15 @@ jobs:
   # Step 2: Main Terraform Deployment
   deploy:
     runs-on: ubuntu-latest
+    environment: dev #must match the federated credential "based on selection" \
+    # and match Github Action Secrets name
     needs: bootstrap # Ensures this runs after the bootstrap job
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to Azure using OIDC
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}           # App Registration client ID
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}           # Tenant ID
