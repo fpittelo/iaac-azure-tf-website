@@ -26,21 +26,16 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}           # Tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # Subscription ID
 
-      - name: Bootstrap Backend Resources
-        run: |
-          RESOURCE_GROUP_NAME="backend"
-          STORAGE_ACCOUNT_NAME="iatbackend"
-          CONTAINER_NAME="backend"
-          LOCATION="SwitzerlandNorth"
-          
-          # Create resource group
-          az group create --name $RESOURCE_GROUP_NAME --location $LOCATION
-
-          # Create storage account
-          az storage account create --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS
-
-          # Create blob container
-          az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+  
+      - name: Terraform Init for Bootstrap
+        working-directory: ./terraform
+        run: terraform init
+  
+      - name: Terraform Apply for Bootstrap
+        working-directory: ./terraform
+        run: terraform apply -auto-approve
 
   # Step 2: Main Terraform Deployment
   deploy:
@@ -61,12 +56,14 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
+        working-directory: ./terraform/main
         env:
           TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
           terraform init -var-file="dev.tfvars"
 
       - name: Terraform Apply
+        working-directory: ./terraform/main
         env:
           TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
