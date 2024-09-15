@@ -89,7 +89,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: ./terraform/main
+        working-directory: ./terraform
         env:
           TF_VAR_az_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           TF_VAR_az_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
@@ -98,7 +98,7 @@ jobs:
           terraform init -var-file="dev.tfvars"
 
       - name: Terraform Apply
-        working-directory: ./terraform/main
+        working-directory: ./terraform
         env:
           TF_VAR_az_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           TF_VAR_az_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
