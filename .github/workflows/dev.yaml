@@ -17,25 +17,25 @@ jobs:
     # and match Github Action Secrets name
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to Azure using OIDC
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}           # App Registration client ID
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}           # Tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # Subscription ID
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
   
       - name: Terraform Init for Bootstrap
         working-directory: ./bootstrap
-        run: terraform init -var-file="dev.tfvars"
+        run: terraform init -var-file="./bootstrap/dev.tfvars"
   
       - name: Terraform Apply for Bootstrap
         working-directory: ./bootstrap
-        run: terraform apply -var-file="dev.tfvars" -auto-approve
+        run: terraform apply -var-file="./bootstrap/dev.tfvars" -auto-approve
 
   # Step 2: Main Terraform Deployment
   deploy:
