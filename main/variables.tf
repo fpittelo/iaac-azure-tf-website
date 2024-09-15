@@ -1,5 +1,10 @@
 #### Variables ######
 
+variable "az_subscription_id" {
+  description = "value of subscription id"
+  type = string
+}
+
 variable "az_backend_rg_name" {
   description = "Resource group name for the Terraform backend storage"
   type        = string
@@ -37,11 +42,6 @@ variable "terraform_key" {
 
 variable "az_location" {
   description = "value of resource group location"
-  type = string
-}
-
-variable "az_subscription_id" {
-  description = "value of subscription id"
   type = string
 }
 
