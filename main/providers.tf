@@ -2,12 +2,11 @@
 
 terraform {
   backend "azurerm" {
-    resource_group_name   = var.az_rg_name          # Replace with your resource group name
-    storage_account_name  = var.az_sa_name          # Replace with your storage account name
-    container_name        = var.az_container_name   # Replace with your container name
-    key                   = var.terraform_key       # Replace with your Terraform state file name
-    region                = var.az_rg_location      # Replace with your resource group location
-    subscription_id       = var.az_subscription_id  # Replace with your subscription ID
+    resource_group_name   = "iat-mkt-dev"           # Replace with your resource group name
+    storage_account_name  = "iatmktdev"             # Replace with your storage account name
+    container_name        = "iatmktdev"             # Replace with your container name
+    key                   = "terraform.tfstate"     # Replace with your Terraform state file name
+    region                = "SwitzerlandNorth"      # Replace with your resource group location
   }
 
   required_providers {
