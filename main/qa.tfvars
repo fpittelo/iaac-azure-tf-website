@@ -6,7 +6,7 @@ environment = "qa"
 az_backend_sa_name = "iatbackend"
 environment = "qa"
 
-az_backend_container_name = "backend"
+az_backend_container_name = "iatbackend"
 environment = "qa"
 
 az_rg_name = "iat-mkt-qa"
