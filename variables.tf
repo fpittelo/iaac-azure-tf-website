@@ -1,37 +1,48 @@
+#### Variables ######
+
+variable "az_backend_rg_name" {
+  description = "Resource group name for the Terraform backend storage"
+  type        = string
+}
+
+variable "az_backend_sa_name" {
+  description = "Storage account name for the Terraform backend"
+  type        = string
+}
+
+variable "az_backend_container_name" {
+  description = "value of container name"
+  type = string
+}
 
 variable "az_rg_name" {
+  description = "value of resource group name"
   type = string
-  default = "iaac-azure-tf-website"
 }
 
-variable "az_sa_name_dev" {
+variable "az_sa_name" {
+  description = "value of storage account name"
   type = string
-  default = "iatwebsitedev"
-}
-
-variable "az_sa_name_qa" {
-  type = string
-  default = "iatwebsiteqa"
-}
-
-variable "az_sa_name_main" {
-  type = string
-  default = "iatwebsitemain"
 }
 
 variable "az_container_name" {
+  description = "value of container name"
   type = string
-  default = "iatwebsite"
 }
 
 variable "terraform_key" {
+  description = "value of terraform state file name"
   type = string
-  default = "terraform.tfstate"
 }
 
-variable "az_rg_location" {
+variable "az_location" {
+  description = "value of resource group location"
   type = string
-  default = "switzerlandnorth"
+}
+
+variable "az_subscription_id" {
+  description = "value of subscription id"
+  type = string
 }
 
 variable "wap_sp_name" {
@@ -40,8 +51,8 @@ variable "wap_sp_name" {
 }
 
 variable "wap_website_name" {
-  type = string
-  default = "marketing"
+  description = "The name of the App Service"
+  type        = string
 }
 
 variable "wap_sp_sku" {
@@ -69,17 +80,13 @@ variable "department" {
   default = "IT"
 }
 
-variable "wap_status_dv" {
+variable "wap_status" {
+  description = "Project Status"
   type = string
-  default = "DEV"
 }
 
-variable "wap_status_qa" {
-  type = string
-  default = "QA"
-}
-
-variable "wap_status_pd" {
-  type = string
-  default = "PROD"
+variable "environment" {
+  description = "The environment for deployment"
+  type        = string
+  default     = "dev"  # optional default value
 }

@@ -2,14 +2,16 @@
 
 terraform {
   backend "azurerm" {
-#   resource_group_name   = "iaac-azure-tf-website"    # Replace with your resource group name
-#   storage_account_name  = "iaac-azure-tf-website"   # Replace with your storage account name
-#   container_name        = "iaac-azure-tf-website"
-#   key                   = "terraform.tfstate"
+    resource_group_name   = var.az_rg_name          # Replace with your resource group name
+    storage_account_name  = var.az_sa_name          # Replace with your storage account name
+    container_name        = var.az_container_name   # Replace with your container name
+    key                   = var.terraform_key       # Replace with your Terraform state file name
+    region                = var.az_rg_location      # Replace with your resource group location
+    subscription_id       = var.az_subscription_id  # Replace with your subscription ID
   }
 
   required_providers {
-    azurerm = {
+    azurerm   = {
       source  = "hashicorp/azurerm"
       version = "~> 3.8"  # Use the appropriate version
     }
@@ -17,16 +19,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy = true
-      recover_soft_deleted_certificates = false
-      recover_soft_deleted_keys = false
-      recover_soft_deleted_secrets = false
-    }
-  }
+  features {}
+  
   # Use OIDC authentication with the GitHub OIDC service principal
-  use_oidc         = true
+  use_oidc  = true
+
 }
 
 data "azurerm_client_config" "current" {}
