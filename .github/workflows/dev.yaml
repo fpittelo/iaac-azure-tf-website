@@ -31,11 +31,11 @@ jobs:
   
       - name: Terraform Init for Bootstrap
         working-directory: ./bootstrap
-        run: terraform init -var-file="./bootstrap/dev.tfvars"
+        run: terraform init
   
       - name: Terraform Apply for Bootstrap
         working-directory: ./bootstrap
-        run: terraform apply -var-file="./bootstrap/dev.tfvars" -auto-approve
+        run: terraform apply -auto-approve
 
   # Step 2: Main Terraform Deployment
   deploy:
