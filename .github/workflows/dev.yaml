@@ -61,6 +61,8 @@ jobs:
         working-directory: ./terraform/main
         env:
           TF_VAR_az_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_az_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          TF_VAR_az_client_id: ${{ secrets.AZURE_CLIENT_ID }}
         run: |
           terraform init -var-file="dev.tfvars"
 
@@ -68,5 +70,7 @@ jobs:
         working-directory: ./terraform/main
         env:
           TF_VAR_az_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_az_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          TF_VAR_az_client_id: ${{ secrets.AZURE_CLIENT_ID }}
         run: |
           terraform apply -var-file="dev.tfvars" -auto-approve

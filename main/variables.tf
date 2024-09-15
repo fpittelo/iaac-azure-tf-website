@@ -5,6 +5,16 @@ variable "az_subscription_id" {
   type = string
 }
 
+variable "az_client_id" {
+  description = "value of subscription id"
+  type = string
+}
+
+variable "az_tenant_id" {
+  description = "value of subscription id"
+  type = string
+}
+
 variable "az_backend_rg_name" {
   description = "Resource group name for the Terraform backend storage"
   type        = string
