@@ -17,7 +17,7 @@ variable "az_tenant_id" {
 
 variable "az_backend_rg_name" {
   description = "Resource group name for the Terraform backend storage"
-  default = "backend"
+  default     = "iatbackend"
   type        = string
 }
 
@@ -29,7 +29,7 @@ variable "az_backend_sa_name" {
 
 variable "az_backend_container_name" {
   description = "value of container name"
-  default = "backend"
+  default = "iatbackend"
   type = string
 }
 

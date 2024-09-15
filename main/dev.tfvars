@@ -1,12 +1,12 @@
 #### Variables values ####
 
-az_backend_rg_name = "backend"
+az_backend_rg_name = "iatbackend"
 environment = "dev"
 
 az_backend_sa_name = "iatbackend"
 environment = "dev"
 
-az_backend_container_name = "backend"
+az_backend_container_name = "iatbackend"
 environment = "dev"
 
 az_rg_name = "iat-mkt-dev"
