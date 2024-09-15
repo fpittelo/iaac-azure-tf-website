@@ -49,8 +49,8 @@ jobs:
 
           # Create storage container if it doesn't exist
           az storage container create \
-            --name $Caz_backend_container_name \
-            --account-name $az_backend_sa_nameE \
+            --name $az_backend_container_name \
+            --account-name $az_backend_sa_name \
             --account-key $STORAGE_KEY
 
       - name: Set up Terraform
