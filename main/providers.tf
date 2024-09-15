@@ -6,7 +6,7 @@ terraform {
     storage_account_name  = "iatmktdev"             # Replace with your storage account name
     container_name        = "iatmktdev"             # Replace with your container name
     key                   = "terraform.tfstate"     # Replace with your Terraform state file name
-    region                = "SwitzerlandNorth"      # Replace with your resource group location
+    location              = "SwitzerlandNorth"      # Replace with your resource group location
   }
 
   required_providers {
