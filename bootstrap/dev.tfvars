@@ -3,7 +3,7 @@
 az_backend_rg_name = "iatbackend"
 environment = "dev"
 
-az_backend_sa_name = "iatbackenddev"
+az_backend_sa_name = "iatbackendev"
 environment = "dev"
 
 az_backend_container_name = "iatbackend"

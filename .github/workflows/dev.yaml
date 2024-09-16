@@ -22,16 +22,16 @@ jobs:
       - name: Login to Azure using OIDC
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}           # App Registration client ID
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}           # Tenant ID
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}             # App Registration client ID
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}             # Tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # Subscription ID
 
       - name:
         run: |
           # Define variables for the backend resources
           az_backend_rg_name="iatbackend"
-          az_backend_sa_name="iatbackend"
-          az_backend_container_name="backend"
+          az_backend_sa_name="iatbackenddev"
+          az_backend_container_name="iatbackend"
           az_location="SwitzerlandNorth"
 
           # Create resource group if it doesn't exist
