@@ -20,4 +20,16 @@ wap_website_name = "iat-mkt-dev"
 
 wap_status = "dev"
 
+department = "IT"
+
+project = "iat-mkt-dev"
+
+owner = "Fred"
+
+wap_sp_sku_os_linux = "Linux"
+
+wap_sp_sku_os_windows = "Windows"
+
+wap_sp_sku = "S1"
+
 environment = "dev"

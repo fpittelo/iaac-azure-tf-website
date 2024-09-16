@@ -1,6 +1,18 @@
 
 ######## Creation of Azure Web infrastructure  ########
 
+resource "azurerm_resource_group" "rg" {
+  name                 = var.az_rg_name
+  location             = var.az_location
+  
+  tags = {
+    project            = var.project
+    owner              = var.owner
+    dept               = var.department
+    status             = var.wap_status
+  }
+}
+
 ### Creation of Azure Service Plan #########
 resource "azurerm_service_plan" "wap_sp_website" {
   name                = var.wap_sp_name

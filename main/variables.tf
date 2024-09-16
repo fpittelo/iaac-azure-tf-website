@@ -66,28 +66,28 @@ variable "wap_website_name" {
 }
 
 variable "wap_sp_sku" {
+  description = "value of sku name"
   type = string
-  default = "S1"
 }
 
 variable "wap_sp_sku_os_linux" {
+  description = "value of os type"
   type = string
-  default = "Linux"
 }
 
 variable "project" {
+  description = "value of project"
   type = string
-  default = "iaac-azure-tf-website"
 }
 
 variable "owner" {
+  description = "value of the owner"
   type = string
-  default = "Fred"
 }
 
 variable "department" {
+  description = "value of department"
   type = string
-  default = "IT"
 }
 
 variable "wap_status" {
