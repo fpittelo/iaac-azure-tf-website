@@ -12,6 +12,7 @@ permissions:
 jobs:
   # Step 1: Bootstrap Backend Resources (if not already done)
   bootstrap:
+    name: Create Terraform Backend
     runs-on: ubuntu-latest
     environment: dev #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
@@ -72,6 +73,7 @@ jobs:
 
 # Step 2: Main Terraform Deployment
   deploy:
+    name: Main Terraform Deployment
     runs-on: ubuntu-latest
     environment: dev #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
