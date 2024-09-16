@@ -5,7 +5,7 @@ terraform {
     resource_group_name   = "iatbackend"           # Replace with your resource group name
     storage_account_name  = "iatbackenddev"             # Replace with your storage account name
     container_name        = "iatbackend"             # Replace with your container name
-    key                   = "terraform.tfstate"     # Replace with your Terraform state file name
+    key                   = "iatbackend.tfstate"     # Replace with your Terraform state file name
   }
 
   required_providers {
