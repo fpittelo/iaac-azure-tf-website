@@ -91,6 +91,13 @@ jobs:
           allow-no-subscriptions: false
           enable-AzPSSession: false
 
+      - name: Set Terraform Environment Variables
+        run: |
+          echo "TF_VAR_az_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_az_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_az_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_az_container_name=iatbackend" >> $GITHUB_ENV  # Replace with actual container name if different
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
 
@@ -118,7 +125,7 @@ jobs:
       
       - name: Upload Terraform Log
         if: always()  # This forces the step to run regardless of the outcome of previous steps
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-log
           path: ./main/terraform.log  # Path to the log file
