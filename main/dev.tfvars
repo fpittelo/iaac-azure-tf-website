@@ -10,7 +10,7 @@ az_rg_name = "iat-mkt-dev"
 
 az_sa_name = "iatmktdev"
 
-az_container = "iatmktdev"
+az_container_name = "iatmktdev"
 
 terraform_key = "terraform.tfstate"
 
@@ -27,8 +27,6 @@ project = "iat-mkt-dev"
 owner = "Fred"
 
 wap_sp_sku_os_linux = "Linux"
-
-wap_sp_sku_os_windows = "Windows"
 
 wap_sp_sku = "S1"
 

@@ -20,6 +20,8 @@ resource "azurerm_service_plan" "wap_sp_website" {
   resource_group_name = var.az_rg_name
   sku_name            = var.wap_sp_sku
   os_type             = var.wap_sp_sku_os_linux
+  
+  depends_on = [azurerm_resource_group.rg]  # Explicit dependency
 
   tags = {
     project     = var.project
@@ -34,6 +36,8 @@ resource "azurerm_linux_web_app" "wap_website" {
   resource_group_name = var.az_rg_name
   location            = var.az_location
   service_plan_id     = azurerm_service_plan.wap_sp_website.id
+
+  depends_on = [azurerm_service_plan.wap_sp_website]  # Explicit dependency
 
   tags = {
     project     = var.project
