@@ -2,7 +2,7 @@
 
 az_backend_rg_name = "iatbackend"
 
-az_backend_sa_name = "iatbackenddev"
+az_backend_sa_name = "iatbackend4dev"
 
 az_backend_container_name = "iatbackend"
 
