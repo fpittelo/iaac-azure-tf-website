@@ -25,6 +25,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}             # App Registration client ID
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}             # Tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # Subscription ID
+          allow-no-subscriptions: false
 
       - name:
         run: |
@@ -68,7 +69,7 @@ jobs:
 #          TF_VAR_az_client_id: ${{ secrets.AZURE_CLIENT_ID }}
 #        run: terraform apply -auto-approve
 
-  # Step 2: Main Terraform Deployment
+# Step 2: Main Terraform Deployment
   deploy:
     runs-on: ubuntu-latest
     environment: dev #must match the federated credential "based on selection" \
@@ -81,8 +82,8 @@ jobs:
       - name: Login to Azure using OIDC
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}           # App Registration client ID
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}           # Tenant ID
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}             # App Registration client ID
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}             # Tenant ID
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} # Subscription ID
 
       - name: Set up Terraform
@@ -90,10 +91,18 @@ jobs:
 
       - name: Terraform Init
         working-directory: ./main
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         run: |
           terraform init -var-file="dev.tfvars"
 
       - name: Terraform Apply
         working-directory: ./main
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         run: |
           terraform apply -var-file="dev.tfvars" -auto-approve
