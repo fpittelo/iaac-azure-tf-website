@@ -2,9 +2,9 @@ name: Destroy Dev Resources
 
 on:
   workflow_dispatch:  # This allows you to manually trigger the destroy workflow
-  push:
-    branches:
-      - dev
+# push:
+#   branches:
+#     - dev
 
 permissions:
   id-token: write  # Required for OIDC authentication
