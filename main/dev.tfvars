@@ -1,16 +1,10 @@
 #### Variables values ####
 
-az_backend_rg_name = "iatbackend"
+az_backend_rg_name = "iat-mkt-dev"
 
 az_backend_sa_name = "iatbackend4dev"
 
 az_backend_container_name = "iatbackend"
-
-az_rg_name = "iat-mkt-dev"
-
-az_sa_name = "iatmktdev"
-
-az_container_name = "iatmktdev"
 
 terraform_key = "terraform.tfstate"
 

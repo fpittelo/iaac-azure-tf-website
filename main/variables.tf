@@ -30,21 +30,6 @@ variable "az_backend_container_name" {
   type = string
 }
 
-variable "az_rg_name" {
-  description = "value of resource group name"
-  type = string
-}
-
-variable "az_sa_name" {
-  description = "value of storage account name"
-  type = string
-}
-
-variable "az_container_name" {
-  description = "value of container name"
-  type = string
-}
-
 variable "terraform_key" {
   description = "value of terraform state file name"
   type = string

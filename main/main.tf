@@ -2,7 +2,7 @@
 ######## Creation of Azure Web infrastructure  ########
 
 resource "azurerm_resource_group" "rg" {
-  name                 = var.az_rg_name
+  name                 = var.az_backend_rg_name
   location             = var.az_location
   
   tags = {
@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_service_plan" "wap_sp_website" {
   name                = var.wap_sp_name
   location            = var.az_location
-  resource_group_name = var.az_rg_name
+  resource_group_name = var.az_backend_rg_name
   sku_name            = var.wap_sp_sku
   os_type             = var.wap_sp_sku_os_linux
   
@@ -33,7 +33,7 @@ resource "azurerm_service_plan" "wap_sp_website" {
 ###### Creation of Azure App Service ######
 resource "azurerm_linux_web_app" "wap_website" {
   name                = var.wap_website_name
-  resource_group_name = var.az_rg_name
+  resource_group_name = var.az_backend_rg_name
   location            = var.az_location
   service_plan_id     = azurerm_service_plan.wap_sp_website.id
 

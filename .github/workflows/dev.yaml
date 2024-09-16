@@ -32,7 +32,7 @@ jobs:
       - name:
         run: |
           # Define variables for the backend resources
-          az_backend_rg_name="iatbackend"
+          az_backend_rg_name="iat-mkt-dev"
           az_backend_sa_name="iatbackend4dev"
           az_backend_container_name="iatbackend"
           az_location="SwitzerlandNorth"
@@ -55,21 +55,6 @@ jobs:
             --name $az_backend_container_name \
             --account-name $az_backend_sa_name \
             --account-key $STORAGE_KEY
-
-#     - name: Set up Terraform
-#       uses: hashicorp/setup-terraform@v3
-# 
-#     - name: Terraform Init for Bootstrap
-#       working-directory: ./bootstrap
-#       run: terraform init
-# 
-#      - name: Terraform Apply for Bootstrap
-#        working-directory: ./bootstrap
-#        env:
-#          TF_VAR_az_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}  # Pass subscription ID
-#          TF_VAR_az_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-#          TF_VAR_az_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-#        run: terraform apply -auto-approve
 
 # Step 2: Main Terraform Deployment
   deploy:
