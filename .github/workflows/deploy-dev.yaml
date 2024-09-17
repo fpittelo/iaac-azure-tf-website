@@ -12,7 +12,7 @@ permissions:
 jobs:
   # Step 1: Bootstrap Backend Resources (if not already done)
   bootstrap:
-    name: Create Terraform Backend
+    name: Deploy Dev Backend
     runs-on: ubuntu-latest
     environment: dev #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
@@ -61,7 +61,7 @@ jobs:
 
 # Step 2: Main Terraform Deployment
   deploy:
-    name: Main Terraform Deployment
+    name: Deploy Dev Infra
     runs-on: ubuntu-latest
     environment: dev #must match the federated credential "based on selection" \
     # and match Github Action Secrets name
@@ -126,9 +126,9 @@ jobs:
   ###### Publish Website to Azure Web App ######
 
   #### Deploy to Dev ####
-  
+
   deploy-website:
-    name: Deploy DEV Website
+    name: Deploy Dev Website
     runs-on: ubuntu-latest
     needs: deploy
     environment: dev
