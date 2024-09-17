@@ -42,7 +42,6 @@ jobs:
           echo "Currently active Azure subscription:"
           az account show --output table
 
-      # Add Re-login and Confirm Subscription step here
       - name: Re-login and Confirm Subscription
         run: |
           echo "Re-confirming login and setting subscription"
