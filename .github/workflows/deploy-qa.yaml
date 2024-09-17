@@ -42,13 +42,17 @@ jobs:
           echo "Currently active Azure subscription:"
           az account show --output table
 
-      - name:
+      - name: Create backend resources
         run: |
           # Define variables for the backend resources
           az_backend_rg_name="backend4qa"
           az_backend_sa_name="backend4qa"
           az_backend_container_name="backend4qa"
           az_location="SwitzerlandNorth"
+
+          # Re-set subscription context before resource group creation as additional safeguard
+          echo "Setting Azure Subscription to: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
           # Create resource group if it doesn't exist
           az group create --name $az_backend_rg_name --location $az_location
