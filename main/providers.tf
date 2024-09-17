@@ -2,7 +2,7 @@
 
 terraform {
   backend "azurerm" {
-    resource_group_name   = "iatbackend"             # Replace with your resource group name
+    resource_group_name   = "iat-mkt-dev"             # Replace with your resource group name
     storage_account_name  = "iatbackend4dev"          # Replace with your storage account name
     container_name        = "iatbackend"             # Replace with your container name
     key                   = "iatbackend.tfstate"     # Replace with your Terraform state file name
