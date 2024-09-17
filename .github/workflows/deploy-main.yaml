@@ -7,7 +7,6 @@ on:
     types:
       - closed
     branches-ignore:
-      - dev
       - qa
 
 permissions:
