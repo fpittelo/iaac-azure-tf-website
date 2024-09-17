@@ -17,7 +17,7 @@ jobs:
     name: Deploy main Backend
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    environment: main #must match the federated credential "based on selection" \
+    environment: main # must match the federated credential "based on selection" \
     # and match Github Action Secrets name
     steps:
       - name: Checkout code
@@ -53,6 +53,8 @@ jobs:
           # Re-set subscription context before resource group creation as additional safeguard
           echo "Setting Azure Subscription to: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          echo "Currently active Azure subscription:"
+          az account show --output table
 
           # Create resource group if it doesn't exist
           az group create --name $az_backend_rg_name --location $az_location
@@ -76,7 +78,7 @@ jobs:
             --account-name $az_backend_sa_name \
             --account-key $STORAGE_KEY
 
-# Step 2: Main Terraform Deployment
+  # Step 2: Main Terraform Deployment
   deploy:
     name: Deploy main Infra
     runs-on: ubuntu-latest
