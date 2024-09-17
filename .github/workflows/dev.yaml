@@ -104,6 +104,11 @@ jobs:
         run: |
           terraform init -var-file="dev.tfvars"
 
+      - name: Terraform Import Resource Group
+        working-directory: ./main
+        run:  |
+          terraform import azurerm_resource_group.existing_rg /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/iat-mkt-dev
+      
       - name: Terraform Apply
         working-directory: ./main
         env:
