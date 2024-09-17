@@ -8,8 +8,6 @@ az_backend_container_name = "backend4dev"
 
 az_rg_name = "iat-mkt-dev"
 
-az_sa_name = "iat-mkt-dev"
-
 terraform_key = "terraform.tfstate"
 
 az_location = "SwitzerlandNorth"
