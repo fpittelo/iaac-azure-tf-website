@@ -39,6 +39,15 @@ jobs:
           echo "Currently active Azure subscription:"
           az account show --output table
       
+      # Add Re-login and Confirm Subscription step here
+      - name: Re-login and Confirm Subscription
+        run: |
+          echo "Re-confirming login and setting subscription"
+          az account clear
+          az login --identity
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          az account show --output table
+      
       - name: Create dev backend resources
         run: |
           # Define variables for the backend resources
