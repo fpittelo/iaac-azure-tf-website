@@ -122,4 +122,37 @@ jobs:
         with:
           name: terraform-log
           path: ./dev/terraform.log  # Path to the log file
-        
+
+  ###### Publish Website to Azure Web App ######
+
+  #### Deploy to Dev ####
+  
+  deploy-website:
+    name: Deploy DEV Website
+    runs-on: ubuntu-latest
+    needs: deploy
+    environment: dev
+
+    steps:
+
+    - name: Pause for 15 seconds
+      run: sleep 15
+
+    - name: Checkout Website code
+      uses: actions/checkout@v3
+      with:
+        repository: fpittelo/website
+        path: website  # Path to place the checked-out code
+
+    - name: Login To Azure with OIDC
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Deploy Website to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.APP_SERVICE_NAME }}
+        package: ./website
