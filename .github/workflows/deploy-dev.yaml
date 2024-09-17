@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - dev
-  pull_request:
-    branches-ignore:
-      - qa
 
 permissions:
   id-token: write  # Required for OIDC authentication

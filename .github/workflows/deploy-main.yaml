@@ -6,8 +6,6 @@ on:
       - main
     types:
       - closed
-    branches-ignore:
-      - qa
 
 permissions:
   id-token: write  # Required for OIDC authentication
