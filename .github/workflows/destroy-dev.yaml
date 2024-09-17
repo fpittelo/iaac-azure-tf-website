@@ -37,7 +37,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: ./main
+        working-directory: ./dev
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -47,7 +47,7 @@ jobs:
           terraform init -var-file="dev.tfvars"
 
       - name: Terraform Destroy
-        working-directory: ./main
+        working-directory: ./dev
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-destroy-log
-          path: ./main/terraform_destroy.log  # Path to the log file
+          path: ./dev/terraform_destroy.log  # Path to the log file
 
       # Additional step to destroy the backend resources created manually in dev.yaml
       - name: Cleanup Backend Resources
