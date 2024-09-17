@@ -107,7 +107,7 @@ jobs:
       - name: Terraform Import Resource Group
         working-directory: ./main
         run:  |
-          terraform import azurerm_resource_group.existing_rg /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/iat-mkt-dev
+          terraform import azurerm_resource_group.rg /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/iat-mkt-dev
       
       - name: Terraform Apply
         working-directory: ./main
