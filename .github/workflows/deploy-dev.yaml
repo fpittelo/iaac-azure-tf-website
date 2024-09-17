@@ -39,7 +39,7 @@ jobs:
           echo "Currently active Azure subscription:"
           az account show --output table
       
-      - name: Create dev backend resources
+      - name: Create backend resources
         run: |
           # Define variables for the backend resources
           az_backend_rg_name="backend4dev"
