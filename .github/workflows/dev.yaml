@@ -32,9 +32,9 @@ jobs:
       - name:
         run: |
           # Define variables for the backend resources
-          az_backend_rg_name="iat-mkt-dev"
-          az_backend_sa_name="iatbackend4dev"
-          az_backend_container_name="iatbackend"
+          az_backend_rg_name="backend4dev"
+          az_backend_sa_name="backend4dev"
+          az_backend_container_name="backend4dev"
           az_location="SwitzerlandNorth"
 
           # Create resource group if it doesn't exist
@@ -103,38 +103,6 @@ jobs:
           ARM_USE_OIDC: true  # Instruct Terraform to use OIDC-based auth
         run: |
           terraform init -var-file="dev.tfvars"
-
-      - name: Terraform Import Resource Group
-        working-directory: ./main
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_USE_OIDC: true  # Instruct Terraform to use OIDC-based auth
-        run:  |
-          terraform import azurerm_resource_group.rg /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/iat-mkt-dev
-      
-      # Import the existing storage account into Terraform state
-      - name: Terraform Import Storage Account
-        working-directory: ./main
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_USE_OIDC: true  # Instruct Terraform to use OIDC-based auth
-        run: |
-          terraform import azurerm_storage_account.backend_sa /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/iat-mkt-dev/providers/Microsoft.Storage/storageAccounts/iatbackend4dev
-
-      # Import the existing storage container into Terraform state
-      - name: Terraform Import Storage Container
-        working-directory: ./main
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_USE_OIDC: true  # Instruct Terraform to use OIDC-based auth
-        run: |
-          terraform import azurerm_storage_container.backend_container iatbackend4dev/iatbackend
 
       - name: Terraform Apply
         working-directory: ./main
