@@ -29,7 +29,17 @@ jobs:
           allow-no-subscriptions: false
           enable-AzPSSession: false
 
-      - name:
+      - name: Set Azure Subscription
+        run:  |
+          echo "Setting Azure Subscription to: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Output Active Azure Subscription Details
+        run: |
+          echo "Currently active Azure subscription:"
+          az account show --output table
+      
+      - name: Create dev backend resources
         run: |
           # Define variables for the backend resources
           az_backend_rg_name="backend4dev"
