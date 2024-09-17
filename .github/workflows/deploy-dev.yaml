@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - dev
+  pull_request:
+    branches-ignore:
+      - qa
+      - main  # Ignore pull requests targeting qa and main branches
 
 permissions:
   id-token: write  # Required for OIDC authentication
