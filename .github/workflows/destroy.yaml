@@ -1,4 +1,4 @@
-name: Destroy dev
+name: Destroy Environment
 
 on:
   workflow_dispatch:  # Allows manual trigger from the GitHub Actions UI
