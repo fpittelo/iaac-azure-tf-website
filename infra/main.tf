@@ -7,13 +7,7 @@ resource "azurerm_resource_group" "rg" {
   name            = var.az_rg_name
   location        = var.az_location
 
-  tags = {
-    project       = var.project
-    owner         = var.owner
-    department    = var.department
-    status        = var.wap_status
-    environment   = var.environment
-  }
+  tags = var.tags
 }
 
 ### Creation of Azure Service Plan #########
@@ -26,14 +20,9 @@ resource "azurerm_service_plan" "wap_sp_website" {
   
   depends_on = [azurerm_resource_group.rg]  # Explicit dependency
 
-  tags = {
-    project     = var.project
-    owner       = var.owner
-    dept        = var.department
-    status      = var.wap_status
-  }
+  tags = var.tags
 }
-###### Creation of Azure App Service ######
+###### Creation of Azure Linux Web App ######
 resource "azurerm_linux_web_app" "wap_website" {
   name                = var.wap_website_name
   resource_group_name = var.az_rg_name
@@ -42,12 +31,7 @@ resource "azurerm_linux_web_app" "wap_website" {
 
   depends_on = [azurerm_service_plan.wap_sp_website]  # Explicit dependency
 
-  tags = {
-    project     = var.project
-    owner       = var.owner
-    dept        = var.department
-    status      = var.wap_status
-  }
+  tags = var.tags
 
   site_config {
     default_documents = ["index.html","index.htm"]
