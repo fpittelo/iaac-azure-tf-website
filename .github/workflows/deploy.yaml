@@ -96,7 +96,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: ./iaac-azure-tf-website/infra
+        working-directory: ./infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -106,7 +106,7 @@ jobs:
           terraform init -var-file="${{ github.ref_name }}.tfvars"
 
       - name: Terraform Apply
-        working-directory: ./iaac-azure-tf-website/infra
+        working-directory: ./infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
