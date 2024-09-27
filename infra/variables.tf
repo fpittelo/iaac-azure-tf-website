@@ -70,18 +70,3 @@ variable "wap_sp_sku_os_linux" {
   description = "value of os type"
   type = string
 }
-
-variable "project" {
-  description = "value of project"
-  type = string
-}
-
-variable "owner" {
-  description = "value of the owner"
-  type = string
-}
-
-variable "department" {
-  description = "value of department"
-  type = string
-}
