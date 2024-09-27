@@ -71,7 +71,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="resource_group_name=${{ env.ENVIRONMENT }}-bkd-iat-website" \
-            -backend-config="storage_account_name=${{ env.ENVIRONMENT }}devbkdiatwebsite" \
+            -backend-config="storage_account_name=${{ env.ENVIRONMENT }}bkdiatwebsite" \
             -backend-config="container_name=${{ env.ENVIRONMENT }}-bkd-iat-website-co" \
             -backend-config="key=${{ env.ENVIRONMENT }}-bkd-iat-website.tfstate" \
             -var-file="${{ env.ENVIRONMENT }}.tfvars"
