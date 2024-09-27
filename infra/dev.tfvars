@@ -15,7 +15,7 @@ az_backend_sa_name                  = "devbkdiatwebsite"
 
 az_backend_container_name           = "dev-bkd-iat-website-co"
 
-terraform_key                       = "terraform.tfstate"
+terraform_key                       = "dev-bkd-iat-website.tfstate"
 
 az_rg_name                          = "dev-iat-mkt"
 

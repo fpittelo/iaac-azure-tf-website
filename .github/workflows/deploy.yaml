@@ -1,4 +1,4 @@
-name: Deploy to Environment
+name: Deploy Environment
 
 on:
   push:
@@ -13,10 +13,10 @@ permissions:
 
 jobs:
   # Step 1: Bootstrap Backend Resources (if not already done)
-  bootstrap:
-    name: Bootstrap Backend for ${{ github.ref_name }}
+  backend:
+    name: Deploy Backend
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}  # dynamic environment based on branch (dev/qa/main)
+    environment: ${{ github.ref_name }}  # Use the branch name as environment
     outputs:
       environment: ${{ steps.setenv.outputs.environment }}
     steps:
@@ -51,7 +51,7 @@ jobs:
           echo "Setting Azure Subscription to: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Create backend resources if not exists
+      - name: Create backend resources
         run: |
           # Define variables for the backend resources
           az_backend_rg_name="${{ env.ENVIRONMENT }}-bkd-iat-website"
@@ -59,23 +59,23 @@ jobs:
           az_backend_container_name="${{ env.ENVIRONMENT }}-bkd-iat-website-co"
           az_location="SwitzerlandNorth"
 
-          echo "Creating resource group if not exists"
+          # Create resource group if it doesn't exist
           az group create --name $az_backend_rg_name --location $az_location
 
-          echo "Creating storage account if not exists"
+          # Create storage account if it doesn't exist
           az storage account create \
             --name $az_backend_sa_name \
             --resource-group $az_backend_rg_name \
             --location $az_location \
-            --sku Standard_LRS --only-show-errors || echo "Storage account exists"
+            --sku Standard_LRS
 
-          echo "Waiting for storage account to be ready..."
+          # Adding a small delay to ensure the storage account is fully provisioned
           sleep 30
 
-          echo "Fetching storage account key"
+          # Get the storage account key
           STORAGE_KEY=$(az storage account keys list --resource-group $az_backend_rg_name --account-name $az_backend_sa_name --query '[0].value' -o tsv)
 
-          echo "Creating storage container if not exists"
+          # Create storage container if it doesn't exist
           az storage container create \
             --name $az_backend_container_name \
             --account-name $az_backend_sa_name \
@@ -83,16 +83,17 @@ jobs:
 
   # Step 2: Main Terraform Deployment
   deploy:
-    name: Deploy ${{ github.ref_name }} Infrastructure
+    name: Deploy Infra
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
-    needs: bootstrap
-    
+    environment: ${{ github.ref_name }} # Use the branch name as environment
+    needs: backend # Ensure this runs after the bootstrap job
+    env:
+      ENVIRONMENT: ${{ needs.backend.outputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to Azure using OIDC
+      - name: Login To Azure Using OIDC
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -106,38 +107,48 @@ jobs:
           echo "TF_VAR_az_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
           echo "TF_VAR_az_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
           echo "TF_VAR_az_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_az_container_name=${{ env.ENVIRONMENT }}-bkd-iat-website-co" >> $GITHUB_ENV
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: ./infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
         run: |
-          terraform init -var-file="${{ github.ref_name }}.tfvars"
+          terraform init \
+            -backend-config="resource_group_name=${{ env.ENVIRONMENT }}-bkd-iat-website" \
+            -backend-config="storage_account_name=${{ env.ENVIRONMENT }}bkdiatwebsite" \
+            -backend-config="container_name=${{ env.ENVIRONMENT }}-bkd-iat-website-co" \
+            -backend-config="key=${{ env.ENVIRONMENT }}-bkd-iat-website.tfstate" \
+            -var-file="${{ env.ENVIRONMENT }}.tfvars"
+        working-directory: ./infra  # Update the working directory to the new infra folder
 
       - name: Terraform Apply
-        working-directory: ./infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
           TF_LOG: DEBUG
           TF_LOG_PATH: terraform.log
         run: |
-          terraform apply -var-file="${{ github.ref_name }}.tfvars" -auto-approve
+          echo "Using environment: ${{ env.ENVIRONMENT }}"
+          terraform apply -var-file="${{ env.ENVIRONMENT }}.tfvars" -auto-approve
+        working-directory: ./infra  # Update the working directory to the new infra folder
 
       - name: Upload Terraform Log
-        if: always()
+        if: always()  # This ensures the step runs regardless of previous step outcomes
         uses: actions/upload-artifact@v4
         with:
-          name: terraform-log-${{ github.ref_name }}
-          path: ./iaac-azure-tf-website/infra/terraform.log
+          name: terraform-log
+          path: ./infra/terraform.log  # Log file now in infra folder
+          overwrite: true
 
   ###### Publish Website to Azure Web App ######
 
