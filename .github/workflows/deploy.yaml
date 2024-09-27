@@ -56,7 +56,7 @@ jobs:
           # Define variables for the backend resources
           az_backend_rg_name="${{ env.ENVIRONMENT }}-bkd-iat-website"
           az_backend_sa_name="${{ env.ENVIRONMENT }}bkdiatwebsite"
-          az_backend_container_name="${{ env.ENVIRONMENT }}-bkd-iatwebsite-co"
+          az_backend_container_name="${{ env.ENVIRONMENT }}-bkd-iat-website-co"
           az_location="SwitzerlandNorth"
 
           echo "Creating resource group if not exists"
