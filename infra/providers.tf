@@ -2,6 +2,7 @@
 
 terraform {
   backend "azurerm" {
+    use_oidc = true
   }
 
   required_providers {
@@ -9,10 +10,6 @@ terraform {
       source  = "hashicorp/azurerm"
     }
   }
-
-  backend "azurerm" {
-    use_oidc = true
-  } 
 }
 
 provider "azurerm" {
