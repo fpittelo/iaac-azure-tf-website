@@ -17,10 +17,25 @@ jobs:
     name: Bootstrap Backend for ${{ github.ref_name }}
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}  # dynamic environment based on branch (dev/qa/main)
-    
+    outputs:
+      environment: ${{ steps.setenv.outputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      
+      - name: Set environment based on branch
+        id: setenv
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            echo "ENVIRONMENT=qa" >> $GITHUB_ENV
+            echo "environment=qa" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "ENVIRONMENT=main" >> $GITHUB_ENV
+            echo "environment=main" >> $GITHUB_OUTPUT
+          fi
 
       - name: Login to Azure using OIDC
         uses: azure/login@v2
@@ -38,9 +53,10 @@ jobs:
 
       - name: Create backend resources if not exists
         run: |
-          az_backend_rg_name="iatbackend${{ github.ref_name }}"
-          az_backend_sa_name="iatbackend${{ github.ref_name }}"
-          az_backend_container_name="iatbackend${{ github.ref_name }}"
+          # Define variables for the backend resources
+          az_backend_rg_name="${{ env.ENVIRONMENT }}-bkd-iat-website""
+          az_backend_sa_name="${{ env.ENVIRONMENT }}bkdiatwebsite"
+          az_backend_container_name="${{ env.ENVIRONMENT }}-bkd-iatwebsite-co"
           az_location="SwitzerlandNorth"
 
           echo "Creating resource group if not exists"

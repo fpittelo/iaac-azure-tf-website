@@ -1,5 +1,11 @@
 #### Variables ######
 
+variable "tags" {
+  description = "Tags to apply to Key Vault resources"
+  type        = map(string)
+  default     = {}  # Set default to empty map if appropriate
+}
+
 variable "az_subscription_id" {
   description = "value of subscription id"
   type = string
@@ -48,7 +54,6 @@ variable "az_location" {
 
 variable "wap_sp_name" {
   type = string
-  default = "marketing-sp"
 }
 
 variable "wap_website_name" {
@@ -79,15 +84,4 @@ variable "owner" {
 variable "department" {
   description = "value of department"
   type = string
-}
-
-variable "wap_status" {
-  description = "Project Status"
-  type = string
-}
-
-variable "environment" {
-  description = "The environment for deployment"
-  type        = string
-  default     = "dev"  # optional default value
 }

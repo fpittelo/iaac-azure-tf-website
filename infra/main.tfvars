@@ -1,29 +1,28 @@
 #### Variables values ####
 
-az_backend_rg_name = "backend4main"
+tags  = {
+  environment                       = "main"
+  project                           = "AlpineBot"
+  owner                             = "Fred"
+  department                        = "IT Department"
+}
 
-az_backend_sa_name = "backend4main"
+az_location                         = "SwitzerlandNorth"
 
-az_backend_container_name = "backend4main"
+az_backend_rg_name                  = "main-bkd-iat-website"
 
-az_rg_name = "iat-mkt-main"
+az_backend_sa_name                  = "mainbkdiatwebsite"
 
-terraform_key = "terraform.tfstate"
+az_backend_container_name           = "main-bkd-iat-website-co"
 
-az_location = "SwitzerlandNorth"
+terraform_key                       = "terraform.tfstate"
 
-wap_website_name = "iat-mkt-main"
+az_rg_name                          = "main-iat-mkt"
 
-wap_status = "main"
+wap_website_name                    = "main-iat-mkt"
 
-department = "IT"
+wap_sp_name                         = "main-iat-mkt-sp"
 
-project = "iat-mkt-main"
+wap_sp_sku_os_linux                 = "Linux"
 
-owner = "Fred"
-
-wap_sp_sku_os_linux = "Linux"
-
-wap_sp_sku = "S1"
-
-environment = "main"
+wap_sp_sku                          = "S1"
