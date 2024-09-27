@@ -22,7 +22,7 @@ resource "azurerm_service_plan" "wap_sp_website" {
 
   tags = var.tags
 }
-###### Creation of Azure App Service ######
+###### Creation of Azure Linux Web App ######
 resource "azurerm_linux_web_app" "wap_website" {
   name                = var.wap_website_name
   resource_group_name = var.az_rg_name

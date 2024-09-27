@@ -2,7 +2,7 @@
 
 tags  = {
   environment                       = "dev"
-  project                           = "AlpineBot"
+  project                           = "iat-mkt-website"
   owner                             = "Fred"
   department                        = "IT Department"
 }
