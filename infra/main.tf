@@ -11,17 +11,30 @@ resource "azurerm_resource_group" "rg" {
 }
 
 ### Creation of Azure Service Plan #########
-resource "azurerm_service_plan" "wap_sp_website" {
-  name                = var.wap_sp_name
-  location            = var.az_location
-  resource_group_name = var.az_rg_name
-  sku_name            = var.wap_sp_sku
-  os_type             = var.wap_sp_sku_os_linux
-  
-  depends_on = [azurerm_resource_group.rg]  # Explicit dependency
+module "azurerm_service_plan" {
+  source = "./modules/app_service_plan"
+  wap_sp_name         = var.wap_sp_name
+  az_rg_name          = var.az_rg_name
+  az_location         = var.az_location
+  wap_sku             = var.wap_sp_sku
+  wap_sp_sku_os_linux = var.wap_sp_sku_os_linux
 
   tags = var.tags
 }
+
+### Creation of Azure Service Plan #########
+#resource "azurerm_service_plan" "wap_sp_website" {
+# name                = var.wap_sp_name
+# location            = var.az_location
+# resource_group_name = var.az_rg_name
+# sku_name            = var.wap_sp_sku
+#  os_type             = var.wap_sp_sku_os_linux
+#  
+#  depends_on = [azurerm_resource_group.rg]  # Explicit dependency
+#
+#  tags = var.tags
+#}
+
 ###### Creation of Azure Linux Web App ######
 resource "azurerm_linux_web_app" "wap_website" {
   name                = var.wap_website_name
