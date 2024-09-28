@@ -12,12 +12,12 @@ resource "azurerm_resource_group" "rg" {
 
 ### Creation of Azure Service Plan #########
 module "azurerm_service_plan" {
-  source = "./modules/app_service_plan"
-  wap_sp_name         = var.wap_sp_name
-  az_rg_name          = var.az_rg_name
-  az_location         = var.az_location
-  wap_sku             = var.wap_sp_sku
-  wap_sp_sku_os_linux = var.wap_sp_sku_os_linux
+  source = "../modules/app_service_plan"
+  wap_sp_name           = var.wap_sp_name
+  wap_sp_sku            = var.wap_sp_sku
+  wap_sp_sku_os_linux   = var.wap_sp_sku_os_linux
+  az_location           = var.az_location
+  az_rg_name            = var.az_rg_name
 
   tags = var.tags
 }
