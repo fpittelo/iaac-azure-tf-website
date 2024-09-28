@@ -40,9 +40,9 @@ resource "azurerm_linux_web_app" "wap_website" {
   name                = var.wap_website_name
   resource_group_name = var.az_rg_name
   location            = var.az_location
-  service_plan_id     = azurerm_service_plan.wap_sp_website.id
+  service_plan_id     = module.azurerm_service_plan.wap_sp_website.id
 
-  depends_on = [azurerm_service_plan.wap_sp_website]  # Explicit dependency
+  depends_on = [module.azurerm_service_plan]  # Explicit dependency
 
   tags = var.tags
 
