@@ -37,22 +37,3 @@ module "linux_web_app" {
 
   depends_on = [module.app_service_plan]  # Explicit dependency
 }
-
-###### Creation of Azure Linux Web App ######
-resource "azurerm_linux_web_app" "wap_website" {
-  name                = var.wap_website_name
-  resource_group_name = var.az_rg_name
-  location            = var.az_location
-  service_plan_id     = module.app_service_plan.service_plan.id
-
-  depends_on = [module.app_service_plan]  # Explicit dependency
-
-  tags = var.tags
-
-  site_config {
-    default_documents = ["index.html","index.htm"]
-    application_stack {
-      php_version = "8.2"
-    }
-  }
-}
