@@ -1,8 +1,43 @@
-# iaac-azure-tf-website
-Deploying a simple website on Azure using Terraform is like setting sail on a cloud journey, where you become the captain of your own digital ship, navigating the seas of infrastructure as code. Picture this: with Terraform as your trusty map and Azure as the vast ocean, you’re embarking on an adventure to create a seamless, automated, and scalable web presence.
+# IaC Azure Terraform Website
 
-Your mission? To craft a resilient and elegant website that stands tall in the cloud, built on the foundation of Terraform’s powerful scripting capabilities. Each line of code is a step toward constructing your virtual domain—defining resources like virtual machines, storage accounts, and networking components with precision and control. Azure’s infrastructure services provide the wind in your sails, offering the reliability, security, and performance needed to keep your site afloat and thriving.
+## What is this?
 
-As you deploy your website, you’ll experience the thrill of watching your infrastructure come to life in real-time, like a digital oasis emerging from the clouds. This isn’t just about putting up a web page; it’s about mastering the art of infrastructure as code, automating the deployment process, and ensuring that your site is built to withstand the waves of change and scale with ease.
+This repository contains the Terraform code to deploy a simple website on Azure. It's a "Hello World" of Infrastructure as Code, but with more YAML and less waving.
 
-In the end, deploying your website on Azure with Terraform is more than a technical task—it’s a creative journey of building, deploying, and managing your digital masterpiece in the cloud, with the freedom to iterate, scale, and innovate at will. So hoist the Terraform script, set your course for Azure, and let your website sail smoothly in the vast expanse of the cloud!
+## How it works
+
+The magic happens in the `.github/workflows/deploy.yaml` file. On a push to `dev`, `qa`, or `main`, a GitHub Actions workflow is triggered.
+
+### The Workflow
+
+Here's a little schema of what's going on under the hood:
+
+```mermaid
+graph TD
+    A[Start] --> B{Push to dev, qa, or main};
+    B --> C[backend: Deploy Backend];
+    C --> D[deploy: Deploy Infra];
+    D --> E[deploy-website: Deploy Website];
+    E --> F[End];
+```
+
+### The Jobs
+
+1.  **backend**: This job creates the Azure Storage Account and container that Terraform uses to store its state. It's like building the foundation before you build the house.
+2.  **deploy**: This job runs `terraform apply` to create all the resources needed for the website (App Service Plan, Web App, etc.). This is where the real magic happens.
+3.  **deploy-website**: This job deploys the actual website content to the Azure Web App. Because what's an infrastructure without a website to show off?
+
+## How to use it
+
+1.  Fork this repository.
+2.  Create the following secrets in your repository:
+    *   `AZURE_CLIENT_ID`
+    *   `AZURE_TENANT_ID`
+    *   `AZURE_SUBSCRIPTION_ID`
+3.  Push a commit to the `dev`, `qa`, or `main` branch.
+4.  Watch the GitHub Actions workflow run and deploy your website.
+5.  Grab a coffee and relax. You've earned it.
+
+## Contributing
+
+Got a funnier README? A better Mermaid diagram? Feel free to open a pull request!
